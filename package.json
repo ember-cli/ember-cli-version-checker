@@ -1,0 +1,20 @@
+{
+  "name": "ember-cli-version-checker",
+  "version": "1.0.0",
+  "description": "Determine if your addon is being used by a minimum version of Ember CLI.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^2.1.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "semver": "^4.2.2"
+  }
+}
