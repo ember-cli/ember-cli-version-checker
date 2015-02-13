@@ -3,6 +3,7 @@ var versionChecker = require('..');
 
 describe('ember-cli-version-checker', function() {
   function FakeAddonAtVersion(version) {
+    this.name = 'fake-addon';
     this.project = {
       emberCLIVersion: function() {
         return version;
@@ -55,6 +56,15 @@ describe('ember-cli-version-checker', function() {
   });
 
   describe('assertAbove', function() {
+    it('throws an error with a default message if a matching version was not found', function() {
+      var addon = new FakeAddonAtVersion('0.1.0');
+      var message = 'The addon `fake-addon` requires an Ember CLI version of 0.1.2 or above, but you are running 0.1.0.';
+
+      assert.throws(function() {
+        versionChecker.assertAbove(addon, '0.1.2',message);
+      }, new RegExp(message));
+    });
+
     it('throws an error with the given message if a matching version was not found', function() {
       var addon = new FakeAddonAtVersion('0.1.0');
       var message = 'Must use at least Ember CLI 0.1.2 to use xyz feature';
