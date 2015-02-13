@@ -43,7 +43,7 @@ module.exports = {
   name: 'awesome-addon',
   init: function() {
     if (versionChecker.isAbove(this, '2.0.0')) {
-      /* deal with 2.0.0 stuff
+      /* deal with 2.0.0 stuff */
     } else {
       /* provide backwards compat */
     };
