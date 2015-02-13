@@ -4,7 +4,7 @@
   "description": "Determine if your addon is being used by a minimum version of Ember CLI.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests"
   },
   "author": "Robert Jackson <me@rwjblue.com>",
   "license": "MIT",

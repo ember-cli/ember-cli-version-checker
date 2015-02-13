@@ -14,6 +14,19 @@ var versionChecker = require('ember-cli-version-checker');
 module.exports = {
   name: 'awesome-addon',
   init: function() {
+    versionChecker.assertAbove(this, '2.0.0');
+  }
+};
+```
+
+You can also provide a specific message as the third argument to `assertAbove` if you'd like to customize the output.
+
+```javascript
+var versionChecker = require('ember-cli-version-checker');
+
+module.exports = {
+  name: 'awesome-addon',
+  init: function() {
     versionChecker.assertAbove(this, '2.0.0', 'To use awesome-addon you must have ember-cli 2.0.0');
   }
 };
