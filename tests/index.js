@@ -12,6 +12,16 @@ describe('ember-cli-version-checker', function() {
   }
 
   describe('isAbove', function() {
+    it('handles metadata after version number', function() {
+      var addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85');
+
+      assert.ok(versionChecker.isAbove(addon, '0.0.0'));
+
+      addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85');
+
+      assert.ok(!versionChecker.isAbove(addon, '100.0.0'));
+    });
+
     it('does not error if addon does not have `project`', function() {
       var addon = {};
 

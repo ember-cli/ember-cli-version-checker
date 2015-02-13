@@ -7,7 +7,10 @@ function getEmberCLIVersion(addon) {
     return null;
   }
 
-  return addon.project.emberCLIVersion();
+  var version = addon.project.emberCLIVersion();
+
+  // remove any meta-data, for dealing with `npm link`'ed ember-cli
+  return version.split('-')[0];
 }
 
 function satisfies(addon, comparison) {
