@@ -1,5 +1,7 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
 var semver = require('semver');
 
 function getEmberCLIVersion(addon) {
@@ -13,38 +15,124 @@ function getEmberCLIVersion(addon) {
   return version.split('-')[0];
 }
 
-function satisfies(addon, comparison) {
-  var version = getEmberCLIVersion(addon);
+function getVersionFromJSONFile(filePath) {
+  if (fs.existsSync(filePath)) {
+    var content = fs.readFileSync(filePath);
 
-  if (!version) {
-    return false;
+    try {
+      return JSON.parse(content).version;
+    } catch (exception) {
+      return null;
+    }
   }
-
-  return semver.satisfies(version, comparison);
 }
 
-function isAbove(addon, minimumVersion) {
-  return satisfies(addon, '>=' + minimumVersion);
+function VersionChecker(addon) {
+  this._addon = addon;
 }
 
-function assertAbove(addon, minimumVersion, _message) {
+VersionChecker.prototype.for = function(name, type) {
+  if (type === 'bower') {
+    return new BowerDependencyVersionChecker(this, name);
+  } else if (type === 'npm') {
+    return new NPMDependencyVersionChecker(this, name);
+  }
+};
+
+function DependencyVersionChecker(parent, name) {
+  this._parent = parent;
+  this.name = name;
+}
+Object.defineProperty(DependencyVersionChecker.prototype, 'version', {
+  get: function() {
+
+    if (this._version === undefined) {
+      this._version = getVersionFromJSONFile(this._jsonPath);
+    }
+
+    return this._version;
+  }
+});
+
+DependencyVersionChecker.prototype.satisfies = function satisfies(comparison) {
+  return semver.satisfies(this.version, comparison);
+};
+
+DependencyVersionChecker.prototype.isAbove = function isAbove(compareVersion) {
+  return semver.satisfies(this.version, '>' + compareVersion);
+}
+
+DependencyVersionChecker.prototype.assertAbove = function assertAbove(compareVersion, _message) {
   var message = _message;
 
   if (!message) {
-    message = 'The addon `' + addon.name + '` requires an Ember CLI version of ' + minimumVersion +
-              ' or above, but you are running ' + getEmberCLIVersion(addon) + '.';
+    message = 'The addon `' + this._parent._addon.name + '` requires the ' + this._type + ' package ' +
+      '`' + this.name + '` to be above ' + compareVersion + ', but you have ' + this.version + '.';
   }
 
-  if (!isAbove(addon, minimumVersion)) {
+  if (!this.isAbove(compareVersion)) {
+    var error  = new Error(message);
+
+    error.suppressStacktrace = true;
+
+    throw error;
+  }
+};
+
+DependencyVersionChecker.prototype._super$constructor = DependencyVersionChecker;
+
+function BowerDependencyVersionChecker() {
+  this._super$constructor.apply(this, arguments);
+
+  this._jsonPath = path.join(this._parent._addon.project.bowerDirectory, this.name, '.bower.json');
+  this._type = 'bower';
+}
+BowerDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
+
+
+function NPMDependencyVersionChecker() {
+  this._super$constructor.apply(this, arguments);
+
+  this._jsonPath = path.join(this._parent._addon.project.nodeModulesPath, this.name, 'package.json');
+  this._type = 'npm';
+}
+NPMDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
+
+function EmberCLIDependencyVersionChecker(addon) {
+  // intentially not calling _super here
+  this._version = getEmberCLIVersion(addon);
+  this._type = 'npm';
+}
+EmberCLIDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
+
+// backwards compat
+VersionChecker.isAbove = function deprecatedIsAbove(addon, comparisonVersion) {
+  var dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
+
+  return dependencyChecker.satisfies('>=' + comparisonVersion);
+};
+
+VersionChecker.satisfies = function deprecatedSatisfies(addon, comparison) {
+  var dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
+
+  return dependencyChecker.satisfies(comparison);
+};
+VersionChecker.assertAbove = function deprecatedAssertAbove(addon, comparsionVersion, _message) {
+  var dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
+  var comparison = '>= ' + comparsionVersion;
+  var message = _message;
+
+  if (!message) {
+    message = 'The addon `' + addon.name + '` requires an Ember CLI version of ' + comparisonVersion +
+      ' or above, but you are running ' + dependencyChecker.version + '.';
+  }
+
+  if (!dependencyChecker.satisfies(comparison)) {
     var error  = new Error(message);
 
     error.suppressStacktrace = true;
     throw error;
   }
-}
+};
 
-module.exports = {
-  isAbove: isAbove,
-  satisfies: satisfies,
-  assertAbove: assertAbove
-}
+module.exports = VersionChecker;
