@@ -117,9 +117,9 @@ VersionChecker.satisfies = function deprecatedSatisfies(addon, comparison) {
 
   return dependencyChecker.satisfies(comparison);
 };
-VersionChecker.assertAbove = function deprecatedAssertAbove(addon, comparsionVersion, _message) {
+VersionChecker.assertAbove = function deprecatedAssertAbove(addon, comparisonVersion, _message) {
   var dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
-  var comparison = '>= ' + comparsionVersion;
+  var comparison = '>= ' + comparisonVersion;
   var message = _message;
 
   if (!message) {
