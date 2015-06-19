@@ -54,13 +54,16 @@ Object.defineProperty(DependencyVersionChecker.prototype, 'version', {
   }
 });
 
-DependencyVersionChecker.prototype.satisfies = function satisfies(comparison) {
-  return semver.satisfies(this.version, comparison);
-};
-
 DependencyVersionChecker.prototype.isAbove = function isAbove(compareVersion) {
   return semver.satisfies(this.version, '>' + compareVersion);
 }
+
+var semverMethods = ['gt', 'lt', 'satisfies'];
+semverMethods.forEach(function(method) {
+  DependencyVersionChecker.prototype[method] = function(range) {
+    return semver[method](this.version, range);
+  };
+});
 
 DependencyVersionChecker.prototype.assertAbove = function assertAbove(compareVersion, _message) {
   var message = _message;

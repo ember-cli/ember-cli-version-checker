@@ -77,17 +77,31 @@ describe('ember-cli-version-checker', function() {
       });
     });
 
-    describe('isAbove', function() {
+    describe('gt', function() {
       it('returns true if version is above the specified range', function() {
         var thing = checker.for('ember', 'npm');
 
-        assert.equal(thing.isAbove('0.0.1'), true);
+        assert.equal(thing.gt('0.0.1'), true);
       });
 
       it('returns false if version is below the specified range', function() {
         var thing = checker.for('ember', 'npm');
 
-        assert.equal(thing.isAbove('99.0.0'), false);
+        assert.equal(thing.gt('99.0.0'), false);
+      });
+    });
+
+    describe('lt', function() {
+      it('returns false if version is above the specified range', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.lt('0.0.1'), false);
+      });
+
+      it('returns true if version is below the specified range', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.lt('99.0.0'), true);
       });
     });
 
