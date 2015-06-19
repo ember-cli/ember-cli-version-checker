@@ -50,6 +50,10 @@ Object.defineProperty(DependencyVersionChecker.prototype, 'version', {
       this._version = getVersionFromJSONFile(this._jsonPath);
     }
 
+    if (this._version === undefined && this._fallbackJsonPath) {
+      this._version = getVersionFromJSONFile(this._fallbackJsonPath);
+    }
+
     return this._version;
   }
 });
@@ -88,6 +92,7 @@ function BowerDependencyVersionChecker() {
   this._super$constructor.apply(this, arguments);
 
   this._jsonPath = path.join(this._parent._addon.project.bowerDirectory, this.name, '.bower.json');
+  this._fallbackJsonPath = path.join(this._parent._addon.project.bowerDirectory, this.name, 'bower.json');
   this._type = 'bower';
 }
 BowerDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
