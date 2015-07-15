@@ -36,7 +36,7 @@ module.exports = {
 };
 ```
 
-#### satisfies
+#### isAbove
 
 Returns `true` if the packages version is above the specified comparison range.
 
