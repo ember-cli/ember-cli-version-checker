@@ -100,8 +100,9 @@ BowerDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker
 
 function NPMDependencyVersionChecker() {
   this._super$constructor.apply(this, arguments);
-
-  this._jsonPath = path.join(this._parent._addon.project.nodeModulesPath, this.name, 'package.json');
+  var project = this._parent._addon.project;
+  var nodeModulesPath = project.nodeModulesPath || path.join(project.root, 'node_modules')
+  this._jsonPath = path.join(nodeModulesPath, this.name, 'package.json');
   this._type = 'npm';
 }
 NPMDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
