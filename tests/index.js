@@ -38,14 +38,6 @@ describe('ember-cli-version-checker', function() {
         assert.equal(thing.version, '1.13.2');
       });
 
-      it('can handle beta releases', function() {
-        addon.project.bowerDirectory = 'tests/fixtures/bower-3';
-
-        var thing = checker.for('ember', 'bower');
-
-        assert.equal(thing.version, '2.3.0');
-      });
-
       it('can return a npm version', function() {
         var thing = checker.for('ember', 'npm');
 
@@ -90,6 +82,22 @@ describe('ember-cli-version-checker', function() {
         var thing = checker.for('ember', 'npm');
 
         assert.equal(thing.isAbove('99.0.0'), false);
+      });
+
+      it('returns true on beta releases if version is above the specified range', function() {
+        addon.project.bowerDirectory = 'tests/fixtures/bower-3';
+
+        var thing = checker.for('ember', 'bower');
+
+        assert.equal(thing.isAbove('2.2.0'), true);
+      });
+
+      it('returns false on beta releases if version is below the specified range', function() {
+        addon.project.bowerDirectory = 'tests/fixtures/bower-3';
+
+        var thing = checker.for('ember', 'bower');
+
+        assert.equal(thing.isAbove('2.3.0'), false);
       });
     });
 
