@@ -59,7 +59,7 @@ Object.defineProperty(DependencyVersionChecker.prototype, 'version', {
 });
 
 DependencyVersionChecker.prototype.isAbove = function isAbove(compareVersion) {
-  return semver.satisfies(this.version, '>' + compareVersion);
+  return semver.gt(this.version, compareVersion);
 }
 
 var semverMethods = ['gt', 'lt', 'satisfies'];
