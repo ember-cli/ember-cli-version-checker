@@ -54,7 +54,9 @@ Object.defineProperty(DependencyVersionChecker.prototype, 'version', {
       this._version = getVersionFromJSONFile(this._fallbackJsonPath);
     }
 
-    return this._version;
+    if (this._version) {
+      return this._version.split('-')[0];
+    }
   }
 });
 

@@ -38,6 +38,14 @@ describe('ember-cli-version-checker', function() {
         assert.equal(thing.version, '1.13.2');
       });
 
+      it('can handle beta releases', function() {
+        addon.project.bowerDirectory = 'tests/fixtures/bower-3';
+
+        var thing = checker.for('ember', 'bower');
+
+        assert.equal(thing.version, '2.3.0');
+      });
+
       it('can return a npm version', function() {
         var thing = checker.for('ember', 'npm');
 
