@@ -91,8 +91,11 @@ DependencyVersionChecker.prototype._super$constructor = DependencyVersionChecker
 function BowerDependencyVersionChecker() {
   this._super$constructor.apply(this, arguments);
 
-  this._jsonPath = path.join(this._parent._addon.project.bowerDirectory, this.name, '.bower.json');
-  this._fallbackJsonPath = path.join(this._parent._addon.project.bowerDirectory, this.name, 'bower.json');
+  var project = this._parent._addon.project;
+  var bowerDependencyPath = path.join(project.root, project.bowerDirectory, this.name);
+
+  this._jsonPath = path.join(bowerDependencyPath, '.bower.json');
+  this._fallbackJsonPath = path.join(bowerDependencyPath, 'bower.json');
   this._type = 'bower';
 }
 BowerDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);

@@ -16,7 +16,8 @@ describe('ember-cli-version-checker', function() {
     var addon, checker;
     beforeEach(function() {
       addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
-        bowerDirectory: 'tests/fixtures/bower-1',
+        root: 'tests/fixtures',
+        bowerDirectory: 'bower-1',
         nodeModulesPath: 'tests/fixtures/npm-1'
       });
 
@@ -31,7 +32,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('can return a fallback bower version for non-tagged releases', function() {
-        addon.project.bowerDirectory = 'tests/fixtures/bower-2';
+        addon.project.bowerDirectory = 'bower-2';
 
         var thing = checker.for('ember', 'bower');
 
@@ -85,7 +86,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns true on beta releases if version is above the specified range', function() {
-        addon.project.bowerDirectory = 'tests/fixtures/bower-3';
+        addon.project.bowerDirectory = 'bower-3';
 
         var thing = checker.for('ember', 'bower');
 
@@ -93,7 +94,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false on beta releases if version is below the specified range', function() {
-        addon.project.bowerDirectory = 'tests/fixtures/bower-3';
+        addon.project.bowerDirectory = 'bower-3';
 
         var thing = checker.for('ember', 'bower');
 
