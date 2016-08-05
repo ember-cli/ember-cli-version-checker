@@ -3,6 +3,9 @@
   "version": "1.1.6",
   "description": "Determine if your addon is being used by a minimum version of Ember CLI.",
   "main": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "test": "mocha tests"
   },
