@@ -16,7 +16,7 @@
     "test": "tests"
   },
   "dependencies": {
-    "semver": "^4.2.2"
+    "semver": "^5.3.0"
   },
   "repository": {
     "type": "git",
