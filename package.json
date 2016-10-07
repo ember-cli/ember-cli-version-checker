@@ -12,6 +12,9 @@
     "lodash": "^3.9.3",
     "mocha": "^2.1.0"
   },
+  "files": [
+    "index.js"
+  ],
   "directories": {
     "test": "tests"
   },
