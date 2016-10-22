@@ -12,6 +12,32 @@ describe('ember-cli-version-checker', function() {
     }, projectProperties);
   }
 
+  describe('VersionChecker#forEmber', function() {
+    var addon, checker;
+    beforeEach(function() {
+      addon = new FakeAddonAtVersion('1.0.0', {
+        root: 'tests/fixtures',
+        bowerDirectory: 'bower-2',
+        nodeModulesPath: 'tests/fixtures/npm-3'
+      });
+
+      checker = new VersionChecker(addon);
+    });
+
+    describe('version', function() {
+      it('returns the bower version if ember-source is not present in npm', function() {
+        addon.project.nodeModulesPath = 'tests/fixtures/npm-1';
+        var thing = checker.forEmber();
+        assert.equal(thing.version, '1.13.2');
+      });
+
+      it('returns the ember-source version before looking for ember in bower', function() {
+        var thing = checker.forEmber();
+        assert.equal(thing.version, '2.10.0');
+      });
+    });
+  });
+
   describe('VersionChecker#for', function() {
     var addon, checker;
     beforeEach(function() {
