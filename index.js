@@ -42,6 +42,16 @@ VersionChecker.prototype.for = function(name, type) {
   }
 };
 
+VersionChecker.prototype.forEmber = function() {
+  var emberVersionChecker = this.for('ember-source', 'npm');
+
+  if (emberVersionChecker.version) {
+    return emberVersionChecker;
+  }
+
+  return this.for('ember', 'bower');
+};
+
 /**
  * DependencyVersionChecker
  */
