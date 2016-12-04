@@ -59,12 +59,18 @@ Object.defineProperty(DependencyVersionChecker.prototype, 'version', {
 });
 
 DependencyVersionChecker.prototype.isAbove = function isAbove(compareVersion) {
+  if (!this.version) {
+    return false;
+  }
   return semver.gt(this.version, compareVersion);
 }
 
 var semverMethods = ['gt', 'lt', 'satisfies'];
 semverMethods.forEach(function(method) {
   DependencyVersionChecker.prototype[method] = function(range) {
+    if (!this.version) {
+      return false;
+    }
     return semver[method](this.version, range);
   };
 });
@@ -91,7 +97,8 @@ DependencyVersionChecker.prototype._super$constructor = DependencyVersionChecker
 function BowerDependencyVersionChecker() {
   this._super$constructor.apply(this, arguments);
 
-  var project = this._parent._addon.project;
+  var addon = this._parent._addon;
+  var project = addon.project;
   var bowerDependencyPath = path.join(project.root, project.bowerDirectory, this.name);
 
   this._jsonPath = path.join(bowerDependencyPath, '.bower.json');
@@ -103,9 +110,11 @@ BowerDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker
 
 function NPMDependencyVersionChecker() {
   this._super$constructor.apply(this, arguments);
-  var project = this._parent._addon.project;
+  var addon = this._parent._addon;
+  var project = addon.project;
   var nodeModulesPath = project.nodeModulesPath || path.join(project.root, 'node_modules')
-  this._jsonPath = path.join(nodeModulesPath, this.name, 'package.json');
+  var npmDependencyPath = path.join(nodeModulesPath, this.name);
+  this._jsonPath = path.join(npmDependencyPath, 'package.json');
   this._type = 'npm';
 }
 NPMDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
