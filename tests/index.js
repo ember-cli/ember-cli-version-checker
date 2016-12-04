@@ -1,5 +1,5 @@
 var assert = require('assert');
-var versionChecker = require('..');
+var VersionChecker = require('..');
 var lodash = require('lodash');
 
 describe('ember-cli-version-checker', function() {
@@ -21,7 +21,7 @@ describe('ember-cli-version-checker', function() {
         nodeModulesPath: 'tests/fixtures/npm-1'
       });
 
-      checker = new versionChecker(addon);
+      checker = new VersionChecker(addon);
     });
 
     describe('version', function() {
@@ -78,7 +78,7 @@ describe('ember-cli-version-checker', function() {
           nodeModulesPath: 'tests/fixtures/npm-2'
         });
 
-        checker = new versionChecker(addon);
+        checker = new VersionChecker(addon);
         var thing = checker.for('ember-source', 'npm');
 
         assert.equal(thing.satisfies('>= 2.9'), false);
@@ -121,7 +121,7 @@ describe('ember-cli-version-checker', function() {
           nodeModulesPath: 'tests/fixtures/npm-2'
         });
 
-        checker = new versionChecker(addon);
+        checker = new VersionChecker(addon);
         var thing = checker.for('ember-source', 'npm');
 
         assert.equal(thing.isAbove('2.9.0'), false);
@@ -148,7 +148,7 @@ describe('ember-cli-version-checker', function() {
           nodeModulesPath: 'tests/fixtures/npm-2'
         });
 
-        checker = new versionChecker(addon);
+        checker = new VersionChecker(addon);
         var thing = checker.for('ember-source', 'npm');
 
         assert.equal(thing.gt('2.9.0'), false);
@@ -175,7 +175,7 @@ describe('ember-cli-version-checker', function() {
           nodeModulesPath: 'tests/fixtures/npm-2'
         });
 
-        checker = new versionChecker(addon);
+        checker = new VersionChecker(addon);
         var thing = checker.for('ember-source', 'npm');
 
         assert.equal(thing.lt('2.9.0'), false);
@@ -216,67 +216,67 @@ describe('ember-cli-version-checker', function() {
     });
   });
 
-  describe('isAbove', function() {
+  describe('VersionChecker#isAbove', function() {
     it('handles metadata after version number', function() {
       var addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85');
 
-      assert.ok(versionChecker.isAbove(addon, '0.0.0'));
+      assert.ok(VersionChecker.isAbove(addon, '0.0.0'));
 
       addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85');
 
-      assert.ok(!versionChecker.isAbove(addon, '100.0.0'));
+      assert.ok(!VersionChecker.isAbove(addon, '100.0.0'));
     });
 
     it('does not error if addon does not have `project`', function() {
       var addon = {};
 
-      assert.ok(!versionChecker.isAbove(addon, '0.0.0'));
+      assert.ok(!VersionChecker.isAbove(addon, '0.0.0'));
     });
 
     it('`0.0.1` should be above `0.0.0`', function() {
       var addon = new FakeAddonAtVersion('0.0.1');
 
-      assert.ok(versionChecker.isAbove(addon, '0.0.0'));
+      assert.ok(VersionChecker.isAbove(addon, '0.0.0'));
     });
 
     it('`0.1.0` should be above `0.0.46`', function() {
       var addon = new FakeAddonAtVersion('0.1.0');
 
-      assert.ok(versionChecker.isAbove(addon, '0.0.46'));
+      assert.ok(VersionChecker.isAbove(addon, '0.0.46'));
     });
 
     it('`0.1.1` should be above `0.1.0`', function() {
       var addon = new FakeAddonAtVersion('0.1.1');
 
-      assert.ok(versionChecker.isAbove(addon, '0.1.0'));
+      assert.ok(VersionChecker.isAbove(addon, '0.1.0'));
     });
 
     it('`1.0.0` should be above `0.1.0`', function() {
       var addon = new FakeAddonAtVersion('1.0.0');
 
-      assert.ok(versionChecker.isAbove(addon, '0.1.0'));
+      assert.ok(VersionChecker.isAbove(addon, '0.1.0'));
     });
 
     it('`0.1.0` should be below `1.0.0`', function() {
       var addon = new FakeAddonAtVersion('0.1.0');
 
-      assert.ok(!versionChecker.isAbove(addon, '1.0.0'));
+      assert.ok(!VersionChecker.isAbove(addon, '1.0.0'));
     });
 
     it('`0.1.0` should be below `0.1.2`', function() {
       var addon = new FakeAddonAtVersion('0.1.0');
 
-      assert.ok(!versionChecker.isAbove(addon, '0.1.2'));
+      assert.ok(!VersionChecker.isAbove(addon, '0.1.2'));
     });
   });
 
-  describe('assertAbove', function() {
+  describe('VersionChecker#assertAbove', function() {
     it('throws an error with a default message if a matching version was not found', function() {
       var addon = new FakeAddonAtVersion('0.1.0');
       var message = 'The addon `fake-addon` requires an Ember CLI version of 0.1.2 or above, but you are running 0.1.0.';
 
       assert.throws(function() {
-        versionChecker.assertAbove(addon, '0.1.2',message);
+        VersionChecker.assertAbove(addon, '0.1.2',message);
       }, new RegExp(message));
     });
 
@@ -285,7 +285,7 @@ describe('ember-cli-version-checker', function() {
       var message = 'Must use at least Ember CLI 0.1.2 to use xyz feature';
 
       assert.throws(function() {
-        versionChecker.assertAbove(addon, '0.1.2',message);
+        VersionChecker.assertAbove(addon, '0.1.2',message);
       }, new RegExp(message));
     });
 
@@ -294,7 +294,7 @@ describe('ember-cli-version-checker', function() {
       var message = 'Must use at least Ember CLI 0.1.2 to use xyz feature';
 
       assert.throws(function() {
-        versionChecker.assertAbove(addon, '0.1.2',message);
+        VersionChecker.assertAbove(addon, '0.1.2',message);
       },
 
       function(err) {

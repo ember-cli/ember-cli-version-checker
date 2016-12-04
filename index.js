@@ -27,6 +27,9 @@ function getVersionFromJSONFile(filePath) {
   }
 }
 
+/**
+ * VersionChecker
+ */
 function VersionChecker(addon) {
   this._addon = addon;
 }
@@ -39,6 +42,9 @@ VersionChecker.prototype.for = function(name, type) {
   }
 };
 
+/**
+ * DependencyVersionChecker
+ */
 function DependencyVersionChecker(parent, name) {
   this._parent = parent;
   this.name = name;
@@ -94,6 +100,10 @@ DependencyVersionChecker.prototype.assertAbove = function assertAbove(compareVer
 
 DependencyVersionChecker.prototype._super$constructor = DependencyVersionChecker;
 
+
+/**
+ * BowerDependencyVersionChecker
+ */
 function BowerDependencyVersionChecker() {
   this._super$constructor.apply(this, arguments);
 
@@ -107,7 +117,9 @@ function BowerDependencyVersionChecker() {
 }
 BowerDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
 
-
+/**
+ * NPMDependencyVersionChecker
+ */
 function NPMDependencyVersionChecker() {
   this._super$constructor.apply(this, arguments);
   var addon = this._parent._addon;
@@ -119,6 +131,9 @@ function NPMDependencyVersionChecker() {
 }
 NPMDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
 
+/**
+ * EmberCLIDependencyVersionChecker
+ */
 function EmberCLIDependencyVersionChecker(addon) {
   // intentially not calling _super here
   this._version = getEmberCLIVersion(addon);
@@ -126,7 +141,11 @@ function EmberCLIDependencyVersionChecker(addon) {
 }
 EmberCLIDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
 
-// backwards compat
+/**
+ * Backwards compatibility class methods
+ *
+ * They compare the version of ember-cli only.
+ */
 VersionChecker.isAbove = function deprecatedIsAbove(addon, comparisonVersion) {
   var dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
 
