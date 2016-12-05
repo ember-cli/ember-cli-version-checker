@@ -1,6 +1,6 @@
 ### Ember CLI Version Checker
 
-Makes determining if a compatible version of a given NPM or Bower package that is present.
+Makes it easier to determine if a compatible version of a given NPM or Bower package is present.
 
 ### Usage
 
