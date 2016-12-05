@@ -44,11 +44,11 @@ DependencyVersionChecker.prototype.isAbove = function isAbove(compareVersion) {
   return semver.gt(this.version, compareVersion);
 };
 
-var semverMethods = ['gt', 'lt', 'satisfies'];
+var semverMethods = ['gt', 'lt', 'gte', 'lte', 'eq', 'neq', 'satisfies'];
 semverMethods.forEach(function(method) {
   DependencyVersionChecker.prototype[method] = function(range) {
     if (!this.version) {
-      return false;
+      return method === 'neq';
     }
     return semver[method](this.version, range);
   };

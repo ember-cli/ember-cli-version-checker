@@ -159,11 +159,13 @@ describe('ember-cli-version-checker', function() {
         var thing = checker.for('ember', 'npm');
 
         assert.equal(thing.gt('0.0.1'), true);
+        assert.equal(thing.gt('1.9.9'), true);
       });
 
       it('returns false if version is below the specified range', function() {
         var thing = checker.for('ember', 'npm');
 
+        assert.equal(thing.gt('2.0.0'), false);
         assert.equal(thing.gt('99.0.0'), false);
       });
 
@@ -186,11 +188,13 @@ describe('ember-cli-version-checker', function() {
         var thing = checker.for('ember', 'npm');
 
         assert.equal(thing.lt('0.0.1'), false);
+        assert.equal(thing.lt('2.0.0'), false);
       });
 
       it('returns true if version is below the specified range', function() {
         var thing = checker.for('ember', 'npm');
 
+        assert.equal(thing.lt('2.0.1'), true);
         assert.equal(thing.lt('99.0.0'), true);
       });
 
@@ -205,6 +209,124 @@ describe('ember-cli-version-checker', function() {
         var thing = checker.for('ember-source', 'npm');
 
         assert.equal(thing.lt('2.9.0'), false);
+      });
+    });
+
+    describe('gte', function() {
+      it('returns true if version is above the specified range', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.gte('0.0.1'), true);
+        assert.equal(thing.gte('2.0.0'), true);
+      });
+
+      it('returns false if version is below the specified range', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.gte('2.0.1'), false);
+        assert.equal(thing.gte('99.0.0'), false);
+      });
+
+      it('returns false if the dependency does not exist', function() {
+        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+          root: 'tests/fixtures',
+          bowerDirectory: 'bower-2',
+          nodeModulesPath: 'tests/fixtures/npm-2'
+        });
+
+        checker = new VersionChecker(addon);
+        var thing = checker.for('ember-source', 'npm');
+
+        assert.equal(thing.gte('2.9.0'), false);
+      });
+    });
+
+    describe('lte', function() {
+      it('returns false if version is above the specified range', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.lte('0.0.1'), false);
+        assert.equal(thing.lte('1.9.9'), false);
+      });
+
+      it('returns true if version is below the specified range', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.lte('2.0.0'), true);
+        assert.equal(thing.lte('99.0.0'), true);
+      });
+
+      it('returns false if the dependency does not exist', function() {
+        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+          root: 'tests/fixtures',
+          bowerDirectory: 'bower-2',
+          nodeModulesPath: 'tests/fixtures/npm-2'
+        });
+
+        checker = new VersionChecker(addon);
+        var thing = checker.for('ember-source', 'npm');
+
+        assert.equal(thing.lte('2.9.0'), false);
+      });
+    });
+
+    describe('eq', function() {
+      it('returns false if version does not match other version', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.eq('0.0.1'), false);
+        assert.equal(thing.eq('1.9.9'), false);
+        assert.equal(thing.eq('2.0.0-beta.1'), false);
+        assert.equal(thing.eq('2.0.1'), false);
+      });
+
+      it('returns true if version matches other version', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.eq('2.0.0'), true);
+      });
+
+      it('returns false if the dependency does not exist', function() {
+        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+          root: 'tests/fixtures',
+          bowerDirectory: 'bower-2',
+          nodeModulesPath: 'tests/fixtures/npm-2'
+        });
+
+        checker = new VersionChecker(addon);
+        var thing = checker.for('ember-source', 'npm');
+
+        assert.equal(thing.eq('2.9.0'), false);
+      });
+    });
+
+    describe('neq', function() {
+      it('returns true if version does not match other version', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.neq('0.0.1'), true);
+        assert.equal(thing.neq('1.9.9'), true);
+        assert.equal(thing.neq('2.0.0-beta.1'), true);
+        assert.equal(thing.neq('2.0.1'), true);
+      });
+
+      it('returns false if version matches other version', function() {
+        var thing = checker.for('ember', 'npm');
+
+        assert.equal(thing.neq('2.0.0'), false);
+      });
+
+      it('returns true if the dependency does not exist', function() {
+        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+          root: 'tests/fixtures',
+          bowerDirectory: 'bower-2',
+          nodeModulesPath: 'tests/fixtures/npm-2'
+        });
+
+        checker = new VersionChecker(addon);
+        var thing = checker.for('ember-source', 'npm');
+
+        assert.equal(thing.neq('2.9.0'), true);
       });
     });
 
