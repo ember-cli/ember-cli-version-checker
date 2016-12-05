@@ -3,6 +3,7 @@
 var path = require('path');
 
 var DependencyVersionChecker = require('./src/dependency-version-checker');
+var BowerDependencyVersionChecker = require('./src/bower-dependency-version-checker');
 
 function getEmberCLIVersion(addon) {
   if (!addon.project || !addon.project.emberCLIVersion) {
@@ -39,22 +40,6 @@ VersionChecker.prototype.forEmber = function() {
 
   return this.for('ember', 'bower');
 };
-
-/**
- * BowerDependencyVersionChecker
- */
-function BowerDependencyVersionChecker() {
-  this._super$constructor.apply(this, arguments);
-
-  var addon = this._parent._addon;
-  var project = addon.project;
-  var bowerDependencyPath = path.join(project.root, project.bowerDirectory, this.name);
-
-  this._jsonPath = path.join(bowerDependencyPath, '.bower.json');
-  this._fallbackJsonPath = path.join(bowerDependencyPath, 'bower.json');
-  this._type = 'bower';
-}
-BowerDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
 
 /**
  * NPMDependencyVersionChecker
