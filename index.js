@@ -4,6 +4,7 @@ var path = require('path');
 
 var DependencyVersionChecker = require('./src/dependency-version-checker');
 var BowerDependencyVersionChecker = require('./src/bower-dependency-version-checker');
+var NPMDependencyVersionChecker = require('./src/npm-dependency-version-checker');
 
 function getEmberCLIVersion(addon) {
   if (!addon.project || !addon.project.emberCLIVersion) {
@@ -40,20 +41,6 @@ VersionChecker.prototype.forEmber = function() {
 
   return this.for('ember', 'bower');
 };
-
-/**
- * NPMDependencyVersionChecker
- */
-function NPMDependencyVersionChecker() {
-  this._super$constructor.apply(this, arguments);
-  var addon = this._parent._addon;
-  var project = addon.project;
-  var nodeModulesPath = project.nodeModulesPath || path.join(project.root, 'node_modules')
-  var npmDependencyPath = path.join(nodeModulesPath, this.name);
-  this._jsonPath = path.join(npmDependencyPath, 'package.json');
-  this._type = 'npm';
-}
-NPMDependencyVersionChecker.prototype = Object.create(DependencyVersionChecker.prototype);
 
 /**
  * EmberCLIDependencyVersionChecker
