@@ -14,6 +14,8 @@ var VersionChecker = require('ember-cli-version-checker');
 module.exports = {
   name: 'awesome-addon',
   init: function() {
+    this._super && this._super.init.apply(this, arguments); 
+
     var checker = new VersionChecker(this);
 
     checker.for('ember-cli', 'npm').assertAbove('2.0.0');
