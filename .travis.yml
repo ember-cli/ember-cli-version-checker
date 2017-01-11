@@ -6,3 +6,12 @@ sudo: false
 cache:
   directories:
     - node_modules
+
+deploy:
+  provider: npm
+  email: stefan.penner+ember-cli@gmail.com
+  api_key:
+    secure: ONrQEBodMvUB0lBZfxq0THahoQNqU5I9Je7+NcPoP+DE5X0zgzZNNosX2CMiVsqZQ6mv4lgUOkYxaW7HlqS1v35sHYGPd7xcx7QXW6iaTwniFK/wryPzLjNrMsbzSMei8hzyH6fyXNd5pKE7AeLf3nV3ehklusS0l/mPRhltTks=
+  on:
+    tags: true
+    repo: ember-cli/ember-cli-version-checker
