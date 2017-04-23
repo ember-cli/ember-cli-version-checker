@@ -1,5 +1,8 @@
 ### Ember CLI Version Checker
 
+[![npm version](https://badge.fury.io/js/ember-cli-version-checker.svg)](https://badge.fury.io/js/ember-cli-version-checker)
+[![Build Status](https://travis-ci.org/ember-cli/ember-cli-version-checker.svg?branch=master)](https://travis-ci.org/ember-cli/ember-cli-version-checker)
+
 Makes it easier to determine if a compatible version of a given NPM or Bower package is present.
 
 ### Usage
