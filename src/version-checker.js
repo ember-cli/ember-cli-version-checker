@@ -4,7 +4,6 @@ const path = require('path');
 
 const BowerDependencyVersionChecker = require('./bower-dependency-version-checker');
 const NPMDependencyVersionChecker = require('./npm-dependency-version-checker');
-const EmberCLIDependencyVersionChecker = require('./ember-cli-dependency-version-checker');
 
 class VersionChecker {
   constructor(addon) {
