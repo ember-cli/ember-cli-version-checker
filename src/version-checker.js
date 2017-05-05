@@ -28,41 +28,6 @@ class VersionChecker {
 
     return this.for('ember', 'bower');
   }
-
-  /**
-   * Backwards compatibility class methods
-   *
-   * They compare the version of ember-cli only.
-   */
-  static isAbove(addon, comparisonVersion) {
-    let dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
-
-    return dependencyChecker.satisfies('>=' + comparisonVersion);
-  }
-
-  static satisfies(addon, comparison) {
-    let dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
-
-    return dependencyChecker.satisfies(comparison);
-  }
-
-  static assertAbove(addon, comparisonVersion, _message) {
-    let dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
-    let comparison = '>= ' + comparisonVersion;
-    let message = _message;
-
-    if (!message) {
-      message = 'The addon `' + addon.name + '` requires an Ember CLI version of ' + comparisonVersion +
-        ' or above, but you are running ' + dependencyChecker.version + '.';
-    }
-
-    if (!dependencyChecker.satisfies(comparison)) {
-      let error  = new Error(message);
-
-      error.suppressStacktrace = true;
-      throw error;
-    }
-  }
 }
 
 module.exports = VersionChecker;
