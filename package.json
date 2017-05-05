@@ -9,8 +9,8 @@
   "author": "Robert Jackson <me@rwjblue.com>",
   "license": "MIT",
   "devDependencies": {
-    "lodash": "^3.9.3",
-    "mocha": "^2.1.0"
+    "lodash": "^4.17.4",
+    "mocha": "^3.3.0"
   },
   "files": [
     "src",
