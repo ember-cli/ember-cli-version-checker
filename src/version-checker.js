@@ -1,10 +1,10 @@
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
-var BowerDependencyVersionChecker = require('./bower-dependency-version-checker');
-var NPMDependencyVersionChecker = require('./npm-dependency-version-checker');
-var EmberCLIDependencyVersionChecker = require('./ember-cli-dependency-version-checker');
+const BowerDependencyVersionChecker = require('./bower-dependency-version-checker');
+const NPMDependencyVersionChecker = require('./npm-dependency-version-checker');
+const EmberCLIDependencyVersionChecker = require('./ember-cli-dependency-version-checker');
 
 class VersionChecker {
   constructor(addon) {
@@ -20,7 +20,7 @@ class VersionChecker {
   }
 
   forEmber() {
-    var emberVersionChecker = this.for('ember-source', 'npm');
+    let emberVersionChecker = this.for('ember-source', 'npm');
 
     if (emberVersionChecker.version) {
       return emberVersionChecker;
@@ -35,21 +35,21 @@ class VersionChecker {
    * They compare the version of ember-cli only.
    */
   static isAbove(addon, comparisonVersion) {
-    var dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
+    let dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
 
     return dependencyChecker.satisfies('>=' + comparisonVersion);
   }
 
   static satisfies(addon, comparison) {
-    var dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
+    let dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
 
     return dependencyChecker.satisfies(comparison);
   }
 
   static assertAbove(addon, comparisonVersion, _message) {
-    var dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
-    var comparison = '>= ' + comparisonVersion;
-    var message = _message;
+    let dependencyChecker = new EmberCLIDependencyVersionChecker(addon);
+    let comparison = '>= ' + comparisonVersion;
+    let message = _message;
 
     if (!message) {
       message = 'The addon `' + addon.name + '` requires an Ember CLI version of ' + comparisonVersion +
@@ -57,7 +57,7 @@ class VersionChecker {
     }
 
     if (!dependencyChecker.satisfies(comparison)) {
-      var error  = new Error(message);
+      let error  = new Error(message);
 
       error.suppressStacktrace = true;
       throw error;

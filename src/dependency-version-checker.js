@@ -1,11 +1,11 @@
 'use strict';
 
-var fs = require('fs');
-var semver = require('semver');
+const fs = require('fs');
+const semver = require('semver');
 
 function getVersionFromJSONFile(filePath) {
   if (fs.existsSync(filePath)) {
-    var content = fs.readFileSync(filePath);
+    let content = fs.readFileSync(filePath);
 
     try {
       return JSON.parse(content).version;
@@ -44,7 +44,7 @@ class DependencyVersionChecker {
   }
 
   assertAbove(compareVersion, _message) {
-    var message = _message;
+    let message = _message;
 
     if (!message) {
       message = 'The addon `' + this._parent._addon.name + '` requires the ' + this._type + ' package ' +
@@ -52,7 +52,7 @@ class DependencyVersionChecker {
     }
 
     if (!this.isAbove(compareVersion)) {
-      var error  = new Error(message);
+      let error  = new Error(message);
 
       error.suppressStacktrace = true;
 
@@ -61,7 +61,7 @@ class DependencyVersionChecker {
   }
 }
 
-var semverMethods = ['gt', 'lt', 'gte', 'lte', 'eq', 'neq', 'satisfies'];
+let semverMethods = ['gt', 'lt', 'gte', 'lte', 'eq', 'neq', 'satisfies'];
 semverMethods.forEach(function(method) {
   DependencyVersionChecker.prototype[method] = function(range) {
     if (!this.version) {

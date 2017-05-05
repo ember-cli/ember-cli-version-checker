@@ -12,14 +12,14 @@ Makes it easier to determine if a compatible version of a given NPM or Bower pac
 Throws an error with the given message if a minimum version isn't met.
 
 ```javascript
-var VersionChecker = require('ember-cli-version-checker');
+let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
   init: function() {
     this._super && this._super.init.apply(this, arguments); 
 
-    var checker = new VersionChecker(this);
+    let checker = new VersionChecker(this);
 
     checker.for('ember-cli', 'npm').assertAbove('2.0.0');
   }
@@ -29,12 +29,12 @@ module.exports = {
 You can also provide a specific message as the third argument to `assertAbove` if you'd like to customize the output.
 
 ```javascript
-var VersionChecker = require('ember-cli-version-checker');
+let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
   init: function() {
-    var checker = new VersionChecker(this);
+    let checker = new VersionChecker(this);
 
     checker.for('ember-cli', 'npm').assertAbove('2.0.0', 'To use awesome-addon you must have ember-cli 2.0.0');
   }
@@ -46,13 +46,13 @@ module.exports = {
 Returns `true` if the packages version is above the specified comparison range.
 
 ```javascript
-var VersionChecker = require('ember-cli-version-checker');
+let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
   init: function() {
-    var checker = new VersionChecker(this);
-    var dep = checker.for('ember-cli', 'npm');
+    let checker = new VersionChecker(this);
+    let dep = checker.for('ember-cli', 'npm');
 
     if (dep.isAbove('2.0.0')) {
       /* deal with 2.0.0 stuff */
@@ -68,16 +68,16 @@ module.exports = {
 You want to provide two different sets of templates, based on the currently running Ember version.
 
 ```javascript
-var path = require('path');
-var VersionChecker = require('ember-cli-version-checker');
+let path = require('path');
+let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
   treeForAddonTemplates: function(tree) {
-    var checker = new VersionChecker(this);
-    var dep = checker.for('ember', 'bower');
+    let checker = new VersionChecker(this);
+    let dep = checker.for('ember', 'bower');
 
-    var baseTemplatesPath = path.join(this.root, 'addon/templates');
+    let baseTemplatesPath = path.join(this.root, 'addon/templates');
 
     if (dep.satisfies('>= 1.13.0') {
       return this.treeGenerator(path.join(baseTemplatesPath, 'current'));
@@ -96,13 +96,13 @@ function `forEmber` will look for `ember-source` from NPM, if it doesn't
 find it, it will look for `ember` in bower.
 
 ```javascript
-var VersionChecker = require('ember-cli-version-checker');
+let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
   init: function() {
-    var checker = new VersionChecker(this);
-    var ember = checker.forEmber();
+    let checker = new VersionChecker(this);
+    let ember = checker.forEmber();
 
     if (ember.isAbove('2.10.0')) {
       /* deal with 2.10.0 stuff */

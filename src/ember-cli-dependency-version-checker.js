@@ -1,13 +1,13 @@
 'use strict';
 
-var DependencyVersionChecker = require('./dependency-version-checker');
+let DependencyVersionChecker = require('./dependency-version-checker');
 
 function getEmberCLIVersion(addon) {
   if (!addon.project || !addon.project.emberCLIVersion) {
     return null;
   }
 
-  var version = addon.project.emberCLIVersion();
+  let version = addon.project.emberCLIVersion();
 
   // remove any meta-data, for dealing with `npm link`'ed ember-cli
   return version.split('-')[0];
