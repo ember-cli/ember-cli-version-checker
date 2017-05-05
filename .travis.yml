@@ -1,11 +1,26 @@
 ---
 language: node_js
+node_js:
+  - "4"
+  - "6"
+  - "stable"
 
 sudo: false
 
 cache:
-  directories:
-    - node_modules
+  yarn: true
+
+
+install:
+  - yarn install --no-lockfile
+
+branches:
+  only:
+    - master
+    - beta
+    - release
+    - auto
+    - /^greenkeeper.*$/
 
 before_deploy:
   - npm install -g auto-dist-tag
