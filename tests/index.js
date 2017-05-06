@@ -52,6 +52,20 @@ describe('ember-cli-version-checker', function() {
       checker = new VersionChecker(addon);
     });
 
+    describe('specified type', function() {
+      it('defaults to `npm`', function() {
+        let thing = checker.for('ember');
+
+        assert.equal(thing.version, '2.0.0');
+      });
+
+      it('allows `bower`', function() {
+        let thing = checker.for('ember', 'bower');
+
+        assert.equal(thing.version, '1.12.1');
+      });
+    });
+
     describe('version', function() {
       it('can return a bower version', function() {
         let thing = checker.for('ember', 'bower');

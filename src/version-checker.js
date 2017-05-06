@@ -13,7 +13,7 @@ class VersionChecker {
   for(name, type) {
     if (type === 'bower') {
       return new BowerDependencyVersionChecker(this, name);
-    } else if (type === 'npm') {
+    } else {
       return new NPMDependencyVersionChecker(this, name);
     }
   }
