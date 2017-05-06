@@ -5,19 +5,15 @@ const VersionChecker = require('..');
 const lodash = require('lodash');
 
 describe('ember-cli-version-checker', function() {
-  function FakeAddonAtVersion(version, projectProperties) {
+  function FakeAddonAtVersion(projectProperties) {
     this.name = 'fake-addon';
-    this.project = lodash.assign({}, {
-      emberCLIVersion: function() {
-        return version;
-      }
-    }, projectProperties);
+    this.project = lodash.assign({}, projectProperties);
   }
 
   describe('VersionChecker#forEmber', function() {
     let addon, checker;
     beforeEach(function() {
-      addon = new FakeAddonAtVersion('1.0.0', {
+      addon = new FakeAddonAtVersion({
         root: 'tests/fixtures',
         bowerDirectory: 'bower-2',
         nodeModulesPath: 'tests/fixtures/npm-3'
@@ -43,7 +39,7 @@ describe('ember-cli-version-checker', function() {
   describe('VersionChecker#for', function() {
     let addon, checker;
     beforeEach(function() {
-      addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+      addon = new FakeAddonAtVersion({
         root: 'tests/fixtures',
         bowerDirectory: 'bower-1',
         nodeModulesPath: 'tests/fixtures/npm-1'
@@ -114,7 +110,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+        addon = new FakeAddonAtVersion({
           root: 'tests/fixtures',
           bowerDirectory: 'bower-2',
           nodeModulesPath: 'tests/fixtures/npm-2'
@@ -157,7 +153,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+        addon = new FakeAddonAtVersion({
           root: 'tests/fixtures',
           bowerDirectory: 'bower-2',
           nodeModulesPath: 'tests/fixtures/npm-2'
@@ -186,7 +182,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+        addon = new FakeAddonAtVersion({
           root: 'tests/fixtures',
           bowerDirectory: 'bower-2',
           nodeModulesPath: 'tests/fixtures/npm-2'
@@ -215,7 +211,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+        addon = new FakeAddonAtVersion({
           root: 'tests/fixtures',
           bowerDirectory: 'bower-2',
           nodeModulesPath: 'tests/fixtures/npm-2'
@@ -244,7 +240,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+        addon = new FakeAddonAtVersion({
           root: 'tests/fixtures',
           bowerDirectory: 'bower-2',
           nodeModulesPath: 'tests/fixtures/npm-2'
@@ -273,7 +269,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+        addon = new FakeAddonAtVersion({
           root: 'tests/fixtures',
           bowerDirectory: 'bower-2',
           nodeModulesPath: 'tests/fixtures/npm-2'
@@ -303,7 +299,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+        addon = new FakeAddonAtVersion({
           root: 'tests/fixtures',
           bowerDirectory: 'bower-2',
           nodeModulesPath: 'tests/fixtures/npm-2'
@@ -333,7 +329,7 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns true if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion('0.1.15-addon-discovery-752a419d85', {
+        addon = new FakeAddonAtVersion({
           root: 'tests/fixtures',
           bowerDirectory: 'bower-2',
           nodeModulesPath: 'tests/fixtures/npm-2'
