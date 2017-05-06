@@ -21,7 +21,7 @@ module.exports = {
 
     let checker = new VersionChecker(this);
 
-    checker.for('ember-cli', 'npm').assertAbove('2.0.0');
+    checker.for('ember-cli').assertAbove('2.0.0');
   }
 };
 ```
@@ -36,7 +36,7 @@ module.exports = {
   init: function() {
     let checker = new VersionChecker(this);
 
-    checker.for('ember-cli', 'npm').assertAbove('2.0.0', 'To use awesome-addon you must have ember-cli 2.0.0');
+    checker.for('ember-cli').assertAbove('2.0.0', 'To use awesome-addon you must have ember-cli 2.0.0');
   }
 };
 ```
@@ -52,7 +52,7 @@ module.exports = {
   name: 'awesome-addon',
   init: function() {
     let checker = new VersionChecker(this);
-    let dep = checker.for('ember-cli', 'npm');
+    let dep = checker.for('ember-cli');
 
     if (dep.isAbove('2.0.0')) {
       /* deal with 2.0.0 stuff */
