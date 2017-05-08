@@ -2,34 +2,77 @@
 
 const assert = require('assert');
 const VersionChecker = require('..');
-const lodash = require('lodash');
+const co = require('co');
+
+const createTempDir = require('broccoli-test-helper').createTempDir;
+
+function buildPackageJSON(name, version) {
+  return `{
+    "name": "${name}",
+    "version": "${version}"
+  }`;
+}
+
+function buildPackage(name, version) {
+  return {
+    'package.json': buildPackageJSON(name, version)
+  };
+}
+
+function buildBowerPackage(name, version, disableBowerVersion) {
+
+  return {
+    '.bower.json': disableBowerVersion ? `{"name": "${name}"}` : buildPackageJSON(name, version),
+    'bower.json': buildPackageJSON(name, version)
+  };
+}
 
 describe('ember-cli-version-checker', function() {
-  function FakeAddonAtVersion(projectProperties) {
-    this.name = 'fake-addon';
-    this.project = lodash.assign({}, projectProperties);
+  let projectRoot;
+
+  class FakeAddon {
+    constructor(project) {
+      this.project = project || {
+        root: projectRoot.path(),
+        bowerDirectory: 'bower_components'
+      };
+      this.name = 'fake-addon';
+    }
   }
 
+  beforeEach(co.wrap(function* () {
+    projectRoot = yield createTempDir();
+  }));
+
   describe('VersionChecker#forEmber', function() {
-    let addon, checker;
+    let addon, checker, projectContents;
+
     beforeEach(function() {
-      addon = new FakeAddonAtVersion({
-        root: 'tests/fixtures',
-        bowerDirectory: 'bower-2',
-        nodeModulesPath: 'tests/fixtures/npm-3'
-      });
+      projectContents = {
+        'bower_components': {
+          'ember': buildBowerPackage('ember', '1.13.2')
+        },
+        'node_modules': {
+          'ember-source': buildPackage('ember-source', '2.10.0')
+        }
+      };
+
+      addon = new FakeAddon();
 
       checker = new VersionChecker(addon);
     });
 
     describe('version', function() {
       it('returns the bower version if ember-source is not present in npm', function() {
-        addon.project.nodeModulesPath = 'tests/fixtures/npm-1';
+        delete projectContents['node_modules'];
+        projectRoot.write(projectContents);
+
         let thing = checker.forEmber();
         assert.equal(thing.version, '1.13.2');
       });
 
       it('returns the ember-source version before looking for ember in bower', function() {
+        projectRoot.write(projectContents);
         let thing = checker.forEmber();
         assert.equal(thing.version, '2.10.0');
       });
@@ -39,11 +82,16 @@ describe('ember-cli-version-checker', function() {
   describe('VersionChecker#for', function() {
     let addon, checker;
     beforeEach(function() {
-      addon = new FakeAddonAtVersion({
-        root: 'tests/fixtures',
-        bowerDirectory: 'bower-1',
-        nodeModulesPath: 'tests/fixtures/npm-1'
+      projectRoot.write({
+        'bower_components': {
+          'ember': buildBowerPackage('ember', '1.12.1')
+        },
+        'node_modules': {
+          'ember': buildPackage('ember', '2.0.0')
+        }
       });
+
+      addon = new FakeAddon();
 
       checker = new VersionChecker(addon);
     });
@@ -70,7 +118,11 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('can return a fallback bower version for non-tagged releases', function() {
-        addon.project.bowerDirectory = 'bower-2';
+        projectRoot.write({
+          'bower_components': {
+            'ember': buildBowerPackage('ember', '1.13.2', true)
+          }
+        });
 
         let thing = checker.for('ember', 'bower');
 
@@ -110,14 +162,8 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion({
-          root: 'tests/fixtures',
-          bowerDirectory: 'bower-2',
-          nodeModulesPath: 'tests/fixtures/npm-2'
-        });
-
         checker = new VersionChecker(addon);
-        let thing = checker.for('ember-source', 'npm');
+        let thing = checker.for('derp', 'npm');
 
         assert.equal(thing.satisfies('>= 2.9'), false);
       });
@@ -137,7 +183,11 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns true on beta releases if version is above the specified range', function() {
-        addon.project.bowerDirectory = 'bower-3';
+        projectRoot.write({
+          'bower_components': {
+            'ember': buildBowerPackage('ember', '2.3.0-beta.2+41030996', true)
+          }
+        });
 
         let thing = checker.for('ember', 'bower');
 
@@ -145,7 +195,11 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false on beta releases if version is below the specified range', function() {
-        addon.project.bowerDirectory = 'bower-3';
+        projectRoot.write({
+          'bower_components': {
+            'ember': buildBowerPackage('ember', '2.3.0-beta.2+41030996', true)
+          }
+        });
 
         let thing = checker.for('ember', 'bower');
 
@@ -153,14 +207,8 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion({
-          root: 'tests/fixtures',
-          bowerDirectory: 'bower-2',
-          nodeModulesPath: 'tests/fixtures/npm-2'
-        });
-
         checker = new VersionChecker(addon);
-        let thing = checker.for('ember-source', 'npm');
+        let thing = checker.for('derpy-herpy', 'npm');
 
         assert.equal(thing.isAbove('2.9.0'), false);
       });
@@ -182,14 +230,8 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion({
-          root: 'tests/fixtures',
-          bowerDirectory: 'bower-2',
-          nodeModulesPath: 'tests/fixtures/npm-2'
-        });
-
         checker = new VersionChecker(addon);
-        let thing = checker.for('ember-source', 'npm');
+        let thing = checker.for('zooeory', 'npm');
 
         assert.equal(thing.gt('2.9.0'), false);
       });
@@ -211,14 +253,8 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion({
-          root: 'tests/fixtures',
-          bowerDirectory: 'bower-2',
-          nodeModulesPath: 'tests/fixtures/npm-2'
-        });
-
         checker = new VersionChecker(addon);
-        let thing = checker.for('ember-source', 'npm');
+        let thing = checker.for('asdfasdf', 'npm');
 
         assert.equal(thing.lt('2.9.0'), false);
       });
@@ -240,14 +276,8 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion({
-          root: 'tests/fixtures',
-          bowerDirectory: 'bower-2',
-          nodeModulesPath: 'tests/fixtures/npm-2'
-        });
-
         checker = new VersionChecker(addon);
-        let thing = checker.for('ember-source', 'npm');
+        let thing = checker.for('hahaha', 'npm');
 
         assert.equal(thing.gte('2.9.0'), false);
       });
@@ -269,14 +299,8 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion({
-          root: 'tests/fixtures',
-          bowerDirectory: 'bower-2',
-          nodeModulesPath: 'tests/fixtures/npm-2'
-        });
-
         checker = new VersionChecker(addon);
-        let thing = checker.for('ember-source', 'npm');
+        let thing = checker.for('lolz', 'npm');
 
         assert.equal(thing.lte('2.9.0'), false);
       });
@@ -299,14 +323,8 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns false if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion({
-          root: 'tests/fixtures',
-          bowerDirectory: 'bower-2',
-          nodeModulesPath: 'tests/fixtures/npm-2'
-        });
-
         checker = new VersionChecker(addon);
-        let thing = checker.for('ember-source', 'npm');
+        let thing = checker.for('not-here', 'npm');
 
         assert.equal(thing.eq('2.9.0'), false);
       });
@@ -329,14 +347,8 @@ describe('ember-cli-version-checker', function() {
       });
 
       it('returns true if the dependency does not exist', function() {
-        addon = new FakeAddonAtVersion({
-          root: 'tests/fixtures',
-          bowerDirectory: 'bower-2',
-          nodeModulesPath: 'tests/fixtures/npm-2'
-        });
-
         checker = new VersionChecker(addon);
-        let thing = checker.for('ember-source', 'npm');
+        let thing = checker.for('not-here', 'npm');
 
         assert.equal(thing.neq('2.9.0'), true);
       });

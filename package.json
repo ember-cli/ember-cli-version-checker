@@ -9,7 +9,8 @@
   "author": "Robert Jackson <me@rwjblue.com>",
   "license": "MIT",
   "devDependencies": {
-    "lodash": "^4.17.4",
+    "broccoli-test-helper": "^1.1.0",
+    "co": "^4.6.0",
     "mocha": "^3.3.0"
   },
   "files": [
