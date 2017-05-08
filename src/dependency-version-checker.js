@@ -25,7 +25,7 @@ class DependencyVersionChecker {
   }
 
   get version() {
-    if (this._version === undefined) {
+    if (this._version === undefined && this._jsonPath) {
       this._version = getVersionFromJSONFile(this._jsonPath);
     }
 

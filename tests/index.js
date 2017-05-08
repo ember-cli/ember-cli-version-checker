@@ -15,7 +15,7 @@ function buildPackageJSON(name, version) {
 
 function buildPackage(name, version) {
   return {
-    'package.json': buildPackageJSON(name, version)
+    'package.json': buildPackageJSON(name, version),
   };
 }
 
@@ -94,6 +94,31 @@ describe('ember-cli-version-checker', function() {
       addon = new FakeAddon();
 
       checker = new VersionChecker(addon);
+    });
+
+    afterEach(function() {
+      return projectRoot.dispose();
+    });
+
+    describe('nested packages', function() {
+      it('finds nested packages from the current addons root', function() {
+        projectRoot.write({
+          'node_modules': {
+            'bar': buildPackage('bar', '3.0.0'),
+            'fake-addon': {
+              'node_modules': {
+                'bar': buildPackage('bar', '2.0.0')
+              }
+            }
+          }
+        });
+
+        addon.root = projectRoot.path('node_modules/fake-addon');
+
+        let thing = checker.for('bar');
+
+        assert.equal(thing.version, '2.0.0');
+      });
     });
 
     describe('specified type', function() {
