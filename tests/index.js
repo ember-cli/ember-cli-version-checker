@@ -32,6 +32,7 @@ describe('ember-cli-version-checker', function() {
 
   class FakeAddon {
     constructor(project) {
+      this.root = projectRoot.path('node_modules/fake-addon'),
       this.project = project || {
         root: projectRoot.path(),
         bowerDirectory: 'bower_components'

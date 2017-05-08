@@ -9,12 +9,10 @@ class NPMDependencyVersionChecker extends DependencyVersionChecker {
     super(parent, name);
 
     let addon = this._parent._addon;
-    let project = addon.project;
-    let nodeModulesPath = project.nodeModulesPath || path.join(project.root, 'node_modules');
 
     let jsonPath;
     try {
-      jsonPath = resolve.sync(this.name + '/package.json', { basedir: addon.root || nodeModulesPath });
+      jsonPath = resolve.sync(this.name + '/package.json', { basedir: addon.root });
     } catch(e) {
       if (e.code === 'MODULE_NOT_FOUND') {
         jsonPath = null;
