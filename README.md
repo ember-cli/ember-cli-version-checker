@@ -16,7 +16,7 @@ let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
-  init: function() {
+  init() {
     this._super && this._super.init.apply(this, arguments); 
 
     let checker = new VersionChecker(this);
@@ -33,7 +33,7 @@ let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
-  init: function() {
+  init() {
     let checker = new VersionChecker(this);
 
     checker.for('ember-cli').assertAbove('2.0.0', 'To use awesome-addon you must have ember-cli 2.0.0');
@@ -50,7 +50,7 @@ let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
-  init: function() {
+  init() {
     let checker = new VersionChecker(this);
     let dep = checker.for('ember-cli');
 
@@ -73,7 +73,7 @@ let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
-  treeForAddonTemplates: function(tree) {
+  treeForAddonTemplates(tree) {
     let checker = new VersionChecker(this);
     let dep = checker.for('ember', 'bower');
 
@@ -100,7 +100,7 @@ let VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
-  init: function() {
+  init() {
     let checker = new VersionChecker(this);
     let ember = checker.forEmber();
 
