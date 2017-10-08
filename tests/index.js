@@ -1,5 +1,7 @@
 'use strict';
 
+/* eslint-env mocha, node */
+
 const assert = require('assert');
 const VersionChecker = require('..');
 const co = require('co');
@@ -133,6 +135,20 @@ describe('ember-cli-version-checker', function() {
         let thing = checker.for('ember', 'bower');
 
         assert.equal(thing.version, '1.12.1');
+      });
+    });
+
+    describe('exists', function() {
+      it('returns true when present', function() {
+        let thing = checker.for('ember');
+
+        assert.ok(thing.exists());
+      });
+
+      it('returns false when not present', function() {
+        let thing = checker.for('rando-thing-here');
+
+        assert.ok(!thing.exists());
       });
     });
 

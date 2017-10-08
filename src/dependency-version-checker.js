@@ -36,6 +36,10 @@ class DependencyVersionChecker {
     return this._version;
   }
 
+  exists() {
+    return this.version !== undefined;
+  }
+
   isAbove(compareVersion) {
     if (!this.version) {
       return false;
