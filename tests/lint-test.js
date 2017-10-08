@@ -1,11 +1,6 @@
 'use strict';
 
-const paths = [
-  'src',
-  'tests',
-  'index.js',
-  '.eslintrc.js'
-];
+const paths = ['src', 'tests', 'index.js', '.eslintrc.js'];
 
 require('mocha-eslint')(paths, {
   timeout: 10000,
