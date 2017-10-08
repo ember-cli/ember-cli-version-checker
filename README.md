@@ -134,3 +134,24 @@ module.exports = {
   }
 };
 ```
+
+### version
+
+A property that returns the version for the dependency, if the dependency is not found
+`undefined` will be returned.
+
+```js
+let VersionChecker = require('ember-cli-version-checker');
+
+module.exports = {
+  name: 'awesome-addon',
+  init() {
+    this._super.init.apply(this, arguments);
+
+    let checker = new VersionChecker(this);
+    let dep = checker.for('ember-cli-qunit');
+
+    // do something with dep.version
+  }
+};
+```
