@@ -9,7 +9,11 @@ class BowerDependencyVersionChecker extends DependencyVersionChecker {
 
     let addon = this._parent._addon;
     let project = addon.project;
-    let bowerDependencyPath = path.join(project.root, project.bowerDirectory, this.name);
+    let bowerDependencyPath = path.join(
+      project.root,
+      project.bowerDirectory,
+      this.name
+    );
 
     this._jsonPath = path.join(bowerDependencyPath, '.bower.json');
     this._fallbackJsonPath = path.join(bowerDependencyPath, 'bower.json');

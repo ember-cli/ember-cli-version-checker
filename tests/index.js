@@ -22,10 +22,11 @@ function buildPackage(name, version) {
 }
 
 function buildBowerPackage(name, version, disableBowerVersion) {
-
   return {
-    '.bower.json': disableBowerVersion ? `{"name": "${name}"}` : buildPackageJSON(name, version),
-    'bower.json': buildPackageJSON(name, version)
+    '.bower.json': disableBowerVersion
+      ? `{"name": "${name}"}`
+      : buildPackageJSON(name, version),
+    'bower.json': buildPackageJSON(name, version),
   };
 }
 
@@ -34,30 +35,32 @@ describe('ember-cli-version-checker', function() {
 
   class FakeAddon {
     constructor(project) {
-      this.root = projectRoot.path('node_modules/fake-addon'),
-      this.project = project || {
-        root: projectRoot.path(),
-        bowerDirectory: 'bower_components'
-      };
+      (this.root = projectRoot.path('node_modules/fake-addon')),
+        (this.project = project || {
+          root: projectRoot.path(),
+          bowerDirectory: 'bower_components',
+        });
       this.name = 'fake-addon';
     }
   }
 
-  beforeEach(co.wrap(function* () {
-    projectRoot = yield createTempDir();
-  }));
+  beforeEach(
+    co.wrap(function*() {
+      projectRoot = yield createTempDir();
+    })
+  );
 
   describe('VersionChecker#forEmber', function() {
     let addon, checker, projectContents;
 
     beforeEach(function() {
       projectContents = {
-        'bower_components': {
-          'ember': buildBowerPackage('ember', '1.13.2')
+        bower_components: {
+          ember: buildBowerPackage('ember', '1.13.2'),
         },
-        'node_modules': {
-          'ember-source': buildPackage('ember-source', '2.10.0')
-        }
+        node_modules: {
+          'ember-source': buildPackage('ember-source', '2.10.0'),
+        },
       };
 
       addon = new FakeAddon();
@@ -86,12 +89,12 @@ describe('ember-cli-version-checker', function() {
     let addon, checker;
     beforeEach(function() {
       projectRoot.write({
-        'bower_components': {
-          'ember': buildBowerPackage('ember', '1.12.1')
+        bower_components: {
+          ember: buildBowerPackage('ember', '1.12.1'),
         },
-        'node_modules': {
-          'ember': buildPackage('ember', '2.0.0')
-        }
+        node_modules: {
+          ember: buildPackage('ember', '2.0.0'),
+        },
       });
 
       addon = new FakeAddon();
@@ -106,14 +109,14 @@ describe('ember-cli-version-checker', function() {
     describe('nested packages', function() {
       it('finds nested packages from the current addons root', function() {
         projectRoot.write({
-          'node_modules': {
-            'bar': buildPackage('bar', '3.0.0'),
+          node_modules: {
+            bar: buildPackage('bar', '3.0.0'),
             'fake-addon': {
-              'node_modules': {
-                'bar': buildPackage('bar', '2.0.0')
-              }
-            }
-          }
+              node_modules: {
+                bar: buildPackage('bar', '2.0.0'),
+              },
+            },
+          },
         });
 
         addon.root = projectRoot.path('node_modules/fake-addon');
@@ -161,9 +164,9 @@ describe('ember-cli-version-checker', function() {
 
       it('can return a fallback bower version for non-tagged releases', function() {
         projectRoot.write({
-          'bower_components': {
-            'ember': buildBowerPackage('ember', '1.13.2', true)
-          }
+          bower_components: {
+            ember: buildBowerPackage('ember', '1.13.2', true),
+          },
         });
 
         let thing = checker.for('ember', 'bower');
@@ -226,9 +229,9 @@ describe('ember-cli-version-checker', function() {
 
       it('returns true on beta releases if version is above the specified range', function() {
         projectRoot.write({
-          'bower_components': {
-            'ember': buildBowerPackage('ember', '2.3.0-beta.2+41030996', true)
-          }
+          bower_components: {
+            ember: buildBowerPackage('ember', '2.3.0-beta.2+41030996', true),
+          },
         });
 
         let thing = checker.for('ember', 'bower');
@@ -238,9 +241,9 @@ describe('ember-cli-version-checker', function() {
 
       it('returns false on beta releases if version is below the specified range', function() {
         projectRoot.write({
-          'bower_components': {
-            'ember': buildBowerPackage('ember', '2.3.0-beta.2+41030996', true)
-          }
+          bower_components: {
+            ember: buildBowerPackage('ember', '2.3.0-beta.2+41030996', true),
+          },
         });
 
         let thing = checker.for('ember', 'bower');
@@ -399,7 +402,8 @@ describe('ember-cli-version-checker', function() {
     describe('assertAbove', function() {
       it('throws an error with a default message if a matching version was not found', function() {
         let thing = checker.for('ember', 'npm');
-        let message = 'The addon `fake-addon` requires the npm package `ember` to be above 999.0.0, but you have 2.0.0.';
+        let message =
+          'The addon `fake-addon` requires the npm package `ember` to be above 999.0.0, but you have 2.0.0.';
 
         assert.throws(function() {
           thing.assertAbove('999.0.0');
@@ -419,13 +423,15 @@ describe('ember-cli-version-checker', function() {
         let message = 'Must use at least Ember CLI 0.1.2 to use xyz feature';
         let thing = checker.for('ember', 'npm');
 
-        assert.throws(function() {
-          thing.assertAbove('999.0.0', message);
-        },
+        assert.throws(
+          function() {
+            thing.assertAbove('999.0.0', message);
+          },
 
-        function(err) {
-          return err.suppressStacktrace;
-        });
+          function(err) {
+            return err.suppressStacktrace;
+          }
+        );
       });
     });
   });

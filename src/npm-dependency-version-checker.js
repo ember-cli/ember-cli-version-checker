@@ -1,6 +1,5 @@
 'use strict';
 
-const path = require('path');
 const resolve = require('resolve');
 const DependencyVersionChecker = require('./dependency-version-checker');
 
@@ -12,8 +11,10 @@ class NPMDependencyVersionChecker extends DependencyVersionChecker {
 
     let jsonPath;
     try {
-      jsonPath = resolve.sync(this.name + '/package.json', { basedir: addon.root });
-    } catch(e) {
+      jsonPath = resolve.sync(this.name + '/package.json', {
+        basedir: addon.root,
+      });
+    } catch (e) {
       if (e.code === 'MODULE_NOT_FOUND') {
         jsonPath = null;
       } else {
