@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+/* eslint-env node */
 
 const BowerDependencyVersionChecker = require('./bower-dependency-version-checker');
 const NPMDependencyVersionChecker = require('./npm-dependency-version-checker');
