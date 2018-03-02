@@ -34,6 +34,28 @@ module.exports = {
 
 ## API
 
+### Semver Methods (gt, lt, gte, lte, eq, neq, satisfies)
+
+See https://github.com/npm/node-semver#comparison and https://github.com/npm/node-semver#ranges-1 for more info
+
+```js
+let VersionChecker = require('ember-cli-version-checker');
+
+module.exports = {
+  name: 'awesome-addon',
+  init() {
+    let checker = new VersionChecker(this);
+    let dep = checker.for('ember-cli');
+
+    if (dep.gte('2.0.0')) {
+      /* deal with 2.0.0+ stuff */
+    } else {
+      /* provide backwards compat */
+    };
+  }
+};
+```
+
 ### assertAbove
 
 Throws an error with the given message if a minimum version isn't met.
