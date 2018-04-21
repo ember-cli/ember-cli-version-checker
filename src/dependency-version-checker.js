@@ -51,9 +51,11 @@ class DependencyVersionChecker {
     let message = _message;
 
     if (!message) {
-      message = `The addon \`${this._parent._addon.name}\` requires the ${this
-        ._type} package \`${this
-        .name}\` to be above ${compareVersion}, but you have ${this.version}.`;
+      message = `The addon \`${this._parent._addon.name}\` requires the ${
+        this._type
+      } package \`${this.name}\` to be above ${compareVersion}, but you have ${
+        this.version
+      }.`;
     }
 
     if (!this.isAbove(compareVersion)) {

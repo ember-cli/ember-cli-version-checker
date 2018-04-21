@@ -8,12 +8,22 @@ class BowerDependencyVersionChecker extends DependencyVersionChecker {
     super(parent, name);
 
     let addon = this._parent._addon;
-    let project = addon.project;
-    let bowerDependencyPath = path.join(
-      project.root,
-      project.bowerDirectory,
-      this.name
-    );
+
+    let root, bowerDirectory;
+
+    if (addon.project) {
+      root = addon.project.root;
+      bowerDirectory = addon.project.bowerDirectory;
+    } else if (addon.root && addon.bowerDirectory) {
+      root = addon.root;
+      bowerDirectory = addon.bowerDirectory;
+    } else {
+      throw new Error(
+        'You must provide an Addon, EmberApp/EmberAddon, or Project to check bower dependencies against'
+      );
+    }
+
+    let bowerDependencyPath = path.join(root, bowerDirectory, this.name);
 
     this._jsonPath = path.join(bowerDependencyPath, '.bower.json');
     this._fallbackJsonPath = path.join(bowerDependencyPath, 'bower.json');
