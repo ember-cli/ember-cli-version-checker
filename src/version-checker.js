@@ -13,13 +13,15 @@ class VersionChecker {
   for(name, type) {
     if (type === 'bower') {
       return new BowerDependencyVersionChecker(this, name);
+    } else if (type === 'projectNpm') {
+      return new NPMDependencyVersionChecker(this, name, true);
     } else {
       return new NPMDependencyVersionChecker(this, name);
     }
   }
 
   forEmber() {
-    let emberVersionChecker = this.for('ember-source', 'npm');
+    let emberVersionChecker = this.for('ember-source', 'projectNpm');
 
     if (emberVersionChecker.version) {
       return emberVersionChecker;
