@@ -82,6 +82,19 @@ describe('ember-cli-version-checker', function() {
         let thing = checker.forEmber();
         assert.equal(thing.version, '2.10.0');
       });
+
+      it('returns the project ember-source version even if an addon ember-source version exists (linking)', function() {
+        projectContents.node_modules['fake-addon'] = {
+          node_modules: {
+            'ember-source': buildPackage('ember-source', '3.1.0'),
+          },
+        };
+
+        projectRoot.write(projectContents);
+
+        let thing = checker.forEmber();
+        assert.equal(thing.version, '2.10.0');
+      });
     });
   });
 
@@ -130,6 +143,21 @@ describe('ember-cli-version-checker', function() {
     describe('specified type', function() {
       it('defaults to `npm`', function() {
         let thing = checker.for('ember');
+
+        assert.equal(thing.version, '2.0.0');
+      });
+
+      it('allows `projectNpm`', function() {
+        projectRoot.write({
+          node_modules: {
+            'fake-addon': {
+              node_modules: {
+                ember: buildPackage('ember', '3.0.0'),
+              },
+            },
+          },
+        });
+        let thing = checker.for('ember', 'projectNpm');
 
         assert.equal(thing.version, '2.0.0');
       });
