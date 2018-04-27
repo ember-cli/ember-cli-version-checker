@@ -38,6 +38,8 @@ describe('ember-cli-version-checker', function() {
       this.root = projectRoot.path();
       this.bowerDirectory = 'bower_components';
     }
+
+    isEmberCLIProject() {}
   }
 
   class FakeAddon {
@@ -77,6 +79,19 @@ describe('ember-cli-version-checker', function() {
         });
 
         describe('version', function() {
+          if (scenario === 'addon') {
+            it('checks the project not the addon', function() {
+              projectContents.node_modules['fake-addon'] = {
+                node_modules: {
+                  'ember-source': buildPackage('ember-source', '3.1.0'),
+                },
+              };
+              projectRoot.write(projectContents);
+              let thing = checker.forEmber();
+              assert.equal(thing.version, '2.10.0');
+            });
+          }
+
           it('returns the bower version if ember-source is not present in npm', function() {
             delete projectContents['node_modules'];
             projectRoot.write(projectContents);
