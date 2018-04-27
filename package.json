@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-version-checker",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Determine if your addon is being used by a minimum version of Ember CLI.",
   "main": "index.js",
   "scripts": {
