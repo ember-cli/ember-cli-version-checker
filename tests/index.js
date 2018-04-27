@@ -38,6 +38,8 @@ describe('ember-cli-version-checker', function() {
       this.root = projectRoot.path();
       this.bowerDirectory = 'bower_components';
     }
+
+    isEmberCLIProject() {}
   }
 
   class FakeAddon {
