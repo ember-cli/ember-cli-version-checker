@@ -37,6 +37,6 @@
   },
   "homepage": "https://github.com/rwjblue/ember-cli-version-checker",
   "engines": {
-    "node": ">= 4"
+    "node": "6.* || 8.* || >= 10.*"
   }
 }
