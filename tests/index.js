@@ -56,6 +56,12 @@ describe('ember-cli-version-checker', function() {
     })
   );
 
+  afterEach(
+    co.wrap(function*() {
+      yield projectRoot.dispose();
+    })
+  );
+
   for (let scenario of ['addon', 'project']) {
     describe(`with ${scenario}`, function() {
       let FakeClass = scenario === 'addon' ? FakeAddon : FakeProject;
