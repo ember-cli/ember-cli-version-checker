@@ -6,6 +6,8 @@ node_js:
   - "10"
   - "11"
 
+dist: xenial
+
 cache:
   yarn: true
 
