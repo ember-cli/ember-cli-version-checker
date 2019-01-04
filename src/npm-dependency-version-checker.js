@@ -33,6 +33,9 @@ class NPMDependencyVersionChecker extends DependencyVersionChecker {
     let jsonPath;
 
     try {
+      // the custom `pnp` code here can be removed when yarn 1.13 is the
+      // current release this is due to Yarn 1.13 and resolve interoperating
+      // together seemlessly
       jsonPath = pnp
         ? pnp.resolveToUnqualified(target, basedir)
         : resolve.sync(target, { basedir });
