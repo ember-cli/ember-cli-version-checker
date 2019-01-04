@@ -6,6 +6,7 @@ const assert = require('assert');
 const VersionChecker = require('..');
 const co = require('co');
 const execSync = require('child_process').execSync;
+const semver = require('semver');
 
 const createTempDir = require('broccoli-test-helper').createTempDir;
 const ROOT = process.cwd();
@@ -479,59 +480,61 @@ describe('ember-cli-version-checker', function() {
     });
   }
 
-  describe('with yarn pnp', function() {
-    this.timeout(600000);
+  if (semver.gte(process.versions.node, '8.0.0')) {
+    describe('with yarn pnp', function() {
+      this.timeout(600000);
 
-    beforeEach(function() {
-      process.chdir(projectRoot.path());
+      beforeEach(function() {
+        process.chdir(projectRoot.path());
 
-      projectRoot.write({
-        'package.json': JSON.stringify({
-          private: true,
-          name: 'test-project',
-          version: '0.0.0',
-          dependencies: {
-            'ember-source-channel-url': '1.1.0',
-            'ember-cli-version-checker': `link:${ROOT}`,
-          },
-          installConfig: {
-            pnp: true,
-          },
-        }),
-        'index.js': `
-const VersionChecker = require('ember-cli-version-checker');
+        projectRoot.write({
+          'package.json': JSON.stringify({
+            private: true,
+            name: 'test-project',
+            version: '0.0.0',
+            dependencies: {
+              'ember-source-channel-url': '1.1.0',
+              'ember-cli-version-checker': `link:${ROOT}`,
+            },
+            installConfig: {
+              pnp: true,
+            },
+          }),
+          'index.js': `
+  const VersionChecker = require('ember-cli-version-checker');
 
-let checker = new VersionChecker({
-  root: process.cwd(),
-  isEmberCLIProject() {},
-});
+  let checker = new VersionChecker({
+    root: process.cwd(),
+    isEmberCLIProject() {},
+  });
 
-let dep = checker.for(process.argv[2]);
-console.log(process.argv[2] + ': ' + dep.version);`,
+  let dep = checker.for(process.argv[2]);
+  console.log(process.argv[2] + ': ' + dep.version);`,
+        });
+
+        execSync('yarn');
       });
 
-      execSync('yarn');
+      afterEach(function() {
+        process.chdir(ROOT);
+      });
+
+      it('finds packages that are present', function() {
+        let result = execSync(
+          'node -r ./.pnp.js ./index.js ember-source-channel-url'
+        );
+
+        assert.strictEqual(
+          result.toString(),
+          'ember-source-channel-url: 1.1.0\n'
+        );
+      });
+
+      it('does not find packages that are missing', function() {
+        let result = execSync('node -r ./.pnp.js ./index.js blah-blah-blah');
+
+        assert.strictEqual(result.toString(), 'blah-blah-blah: undefined\n');
+      });
     });
-
-    afterEach(function() {
-      process.chdir(ROOT);
-    });
-
-    it('finds packages that are present', function() {
-      let result = execSync(
-        'node -r ./.pnp.js ./index.js ember-source-channel-url'
-      );
-
-      assert.strictEqual(
-        result.toString(),
-        'ember-source-channel-url: 1.1.0\n'
-      );
-    });
-
-    it('does not find packages that are missing', function() {
-      let result = execSync('node -r ./.pnp.js ./index.js blah-blah-blah');
-
-      assert.strictEqual(result.toString(), 'blah-blah-blah: undefined\n');
-    });
-  });
+  }
 });
