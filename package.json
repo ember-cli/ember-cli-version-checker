@@ -4,7 +4,8 @@
   "description": "Determine if your addon is being used by a minimum version of Ember CLI.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests"
+    "test": "mocha tests",
+    "changelog": "lerna-changelog"
   },
   "author": "Robert Jackson <me@rwjblue.com>",
   "license": "MIT",
@@ -13,6 +14,7 @@
     "co": "^4.6.0",
     "eslint-config-prettier": "^2.6.0",
     "eslint-plugin-prettier": "^2.3.1",
+    "lerna-changelog": "^0.8.2",
     "mocha": "^3.3.0",
     "mocha-eslint": "^4.1.0",
     "prettier": "^1.7.4"
