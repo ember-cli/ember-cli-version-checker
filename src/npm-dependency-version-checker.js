@@ -40,7 +40,7 @@ class NPMDependencyVersionChecker extends DependencyVersionChecker {
         ? pnp.resolveToUnqualified(target, basedir)
         : resolve.sync(target, { basedir });
     } catch (e) {
-      if (ALLOWED_ERROR_CODES.includes(e.code)) {
+      if (ALLOWED_ERROR_CODES.indexOf(e.code) > -1) {
         jsonPath = null;
       } else {
         throw e;
