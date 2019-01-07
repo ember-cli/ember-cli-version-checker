@@ -21,6 +21,7 @@ branches:
     - release
     - auto
     - /^greenkeeper.*$/
+    - v2
 
 before_deploy:
   - npm install -g auto-dist-tag
