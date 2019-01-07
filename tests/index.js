@@ -157,6 +157,23 @@ describe('ember-cli-version-checker', function() {
 
             assert.equal(thing.version, '2.0.0');
           });
+
+          if (scenario === 'addon') {
+            it('falls back to the project root for instances of `EmberAddon` that do not have a `root` property', function() {
+              projectRoot.write({
+                node_modules: {
+                  bar: buildPackage('bar', '3.0.0'),
+                  'fake-addon': {},
+                },
+              });
+
+              delete addon.root;
+
+              let thing = checker.for('bar');
+
+              assert.equal(thing.version, '3.0.0');
+            });
+          }
         });
 
         describe('specified type', function() {
