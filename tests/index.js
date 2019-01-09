@@ -33,6 +33,16 @@ function buildBowerPackage(name, version, disableBowerVersion) {
   };
 }
 
+function buildVersionCheckerBin(addon) {
+  return `
+    const VersionChecker = require('ember-cli-version-checker');
+
+    let checker = new VersionChecker(${addon});
+
+    let dep = checker.for(process.argv[2]);
+    console.log(process.argv[2] + ': ' + dep.version);`;
+}
+
 describe('ember-cli-version-checker', function() {
   let projectRoot;
 
@@ -157,6 +167,23 @@ describe('ember-cli-version-checker', function() {
 
             assert.equal(thing.version, '2.0.0');
           });
+
+          if (scenario === 'addon') {
+            it('falls back to the project root for instances of `EmberAddon` that do not have a `root` property', function() {
+              projectRoot.write({
+                node_modules: {
+                  bar: buildPackage('bar', '3.0.0'),
+                  'fake-addon': {},
+                },
+              });
+
+              delete addon.root;
+
+              let thing = checker.for('bar');
+
+              assert.equal(thing.version, '3.0.0');
+            });
+          }
         });
 
         describe('specified type', function() {
@@ -500,16 +527,10 @@ describe('ember-cli-version-checker', function() {
               pnp: true,
             },
           }),
-          'index.js': `
-  const VersionChecker = require('ember-cli-version-checker');
-
-  let checker = new VersionChecker({
-    root: process.cwd(),
-    isEmberCLIProject() {},
-  });
-
-  let dep = checker.for(process.argv[2]);
-  console.log(process.argv[2] + ': ' + dep.version);`,
+          'index.js': buildVersionCheckerBin(`{
+            root: process.cwd(),
+            isEmberCLIProject() {},
+          }`),
         });
 
         execSync('yarn');
@@ -537,4 +558,66 @@ describe('ember-cli-version-checker', function() {
       });
     });
   }
+
+  describe('with yarn workspace', function() {
+    this.timeout(600000);
+
+    beforeEach(function() {
+      process.chdir(projectRoot.path());
+
+      projectRoot.write({
+        'package.json': JSON.stringify({
+          private: true,
+          name: 'test-project',
+          workspaces: ['app', 'addon'],
+        }),
+        addon: {
+          'dummy.js': buildVersionCheckerBin(`{
+            project: {
+              root: '${projectRoot.path('addon')}',
+            },
+          }`),
+          node_modules: {
+            bar: buildPackage('bar', '3.0.0'),
+          },
+        },
+        app: {
+          'index.js': buildVersionCheckerBin(`{
+            root: process.cwd(),
+            isEmberCLIProject() {},
+          }`),
+        },
+        node_modules: {
+          'ember-cli-version-checker': `module.exports = require('${ROOT}');`,
+          bar: buildPackage('bar', '2.0.0'),
+        },
+      });
+    });
+
+    afterEach(function() {
+      process.chdir(ROOT);
+    });
+
+    // https://github.com/ember-cli/ember-cli-version-checker/issues/70
+    it('uses the sub-package local version over the hoisted version for addon dummy apps', function() {
+      process.chdir(projectRoot.path('addon'));
+      let result = execSync('node ./dummy.js bar');
+
+      assert.strictEqual(result.toString(), 'bar: 3.0.0\n');
+    });
+
+    it('uses the hoisted version, if there is no package local version', function() {
+      process.chdir(projectRoot.path('app'));
+      let result = execSync('node ./index.js bar');
+
+      assert.strictEqual(result.toString(), 'bar: 2.0.0\n');
+    });
+
+    it('does not find packages that are missing', function() {
+      process.chdir(projectRoot.path('app'));
+      let result = execSync('node ./index.js blah-blah-blah');
+
+      assert.strictEqual(result.toString(), 'blah-blah-blah: undefined\n');
+    });
+  });
 });

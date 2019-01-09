@@ -2,6 +2,7 @@
 
 const resolve = require('resolve');
 const DependencyVersionChecker = require('./dependency-version-checker');
+const getProject = require('./get-project');
 
 const ALLOWED_ERROR_CODES = [
   // resolve package error codes
@@ -28,7 +29,7 @@ class NPMDependencyVersionChecker extends DependencyVersionChecker {
     let addon = this._parent._addon;
 
     let target = this.name + '/package.json';
-    let basedir = addon.root;
+    let basedir = addon.root || getProject(addon).root;
 
     let jsonPath;
 
