@@ -1,3 +1,21 @@
+## v3.0.1 (2019-01-09)
+
+#### :bug: Bug Fix
+* [#71](https://github.com/ember-cli/ember-cli-version-checker/pull/71) fix: fallback to project if addon has no root ([@buschtoens](https://github.com/buschtoens))
+
+#### Committers: 1
+- Jan Buschtöns ([@buschtoens](https://github.com/buschtoens))
+
+
+## v2.2.0 (2019-01-07)
+
+#### :rocket: Enhancement
+* [#83](https://github.com/ember-cli/ember-cli-version-checker/pull/83) Backport Yarn PnP Support to 2.x ([@rwjblue](https://github.com/rwjblue))
+
+#### Committers: 1
+- Robert Jackson ([@rwjblue](https://github.com/rwjblue))
+
+
 ## v3.0.0 (2019-01-07)
 
 #### :boom: Breaking Change
