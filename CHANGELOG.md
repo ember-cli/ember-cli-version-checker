@@ -1,3 +1,11 @@
+## v3.1.0 (2019-02-28)
+
+#### :rocket: Enhancement
+* [#97](https://github.com/ember-cli/ember-cli-version-checker/pull/97) Perf fix: cache the resolutions identically to how require does. ([@stefanpenner](https://github.com/stefanpenner))
+
+#### Committers: 1
+- Stefan Penner ([@stefanpenner](https://github.com/stefanpenner))
+
 ## v3.0.1 (2019-01-09)
 
 #### :bug: Bug Fix
