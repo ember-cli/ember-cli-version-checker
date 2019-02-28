@@ -203,7 +203,6 @@ describe('ember-cli-version-checker', function() {
         describe('exists', function() {
           it('returns true when present', function() {
             let thing = checker.for('ember');
-
             assert.ok(thing.exists());
           });
 
