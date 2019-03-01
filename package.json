@@ -26,7 +26,7 @@
     "changelog": "lerna-changelog"
   },
   "dependencies": {
-    "resolve-package-path": "^1.0.6",
+    "resolve-package-path": "^1.0.7",
     "semver": "^5.6.0"
   },
   "devDependencies": {
