@@ -1,3 +1,11 @@
+## v3.1.3 (2019-03-26)
+
+#### :bug: Bug Fix
+* [#106](https://github.com/ember-cli/ember-cli-version-checker/pull/106) Fix issue with PnP + missing packages ([@stefanpenner](https://github.com/stefanpenner))
+
+#### Committers: 1
+- Stefan Penner ([@stefanpenner](https://github.com/stefanpenner))
+
 ## v3.1.0 (2019-02-28)
 
 #### :rocket: Enhancement
