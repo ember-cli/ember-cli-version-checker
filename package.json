@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "resolve-package-path": "^1.2.6",
-    "semver": "^5.6.0"
+    "semver": "^6.0.0"
   },
   "devDependencies": {
     "broccoli-test-helper": "^2.0.0",
