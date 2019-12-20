@@ -194,7 +194,19 @@ When creating `VersionChecker(addonOrAppOrProject)`, the param needs to have a `
 property for the VersionChecker to perform node's
 [module resolution](https://nodejs.org/api/modules.html#modules_all_together).
 
-It is important to have `new VersionChecker(this.project)` from an addon, this way the package in `node_modules`
-resolved to get `version` will be same as if you `require.resolve(<lib>)` from app root.
+### Should I use project or parent?
+
+The two primary options that are valid are:
+
+- `new VersionChecker(this.project)`
+- `new VersionChecker(this.parent)`
+
+Which one to use depends on if the addon is trying to find a known top-level library or its parent's.
+
+For example, you may want to check `this.project` root path to find `ember-cli` or `ember-source`,
+which are expected to be top-level.
+Or you may want to check your parent's specific dependency that affects your addon's behavior, you should create
+from `this.parent`.
+
 If you create via `new VersionChecker(this)` in an addon, it will resolve from your addon's path and have your
-own dependency's version instead of top-level dependency's if exists.
+own dependency's version instead of top-level dependency's if exists. This will result in unreliable result.
