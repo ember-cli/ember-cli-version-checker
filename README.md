@@ -18,7 +18,7 @@ let VersionChecker = require('ember-cli-version-checker');
 module.exports = {
   name: 'awesome-addon',
   treeForAddonTemplates(tree) {
-    let checker = new VersionChecker(this);
+    let checker = new VersionChecker(this.project);
     let dep = checker.for('ember', 'bower');
 
     let baseTemplatesPath = path.join(this.root, 'addon/templates');
@@ -44,7 +44,9 @@ let VersionChecker = require('ember-cli-version-checker');
 module.exports = {
   name: 'awesome-addon',
   init() {
-    let checker = new VersionChecker(this);
+    this._super.init.apply(this, arguments);
+
+    let checker = new VersionChecker(this.project);
     let dep = checker.for('ember-cli');
 
     if (dep.gte('2.0.0')) {
@@ -66,9 +68,9 @@ let VersionChecker = require('ember-cli-version-checker');
 module.exports = {
   name: 'awesome-addon',
   init() {
-    this._super && this._super.init.apply(this, arguments); 
+    this._super.init.apply(this, arguments);
 
-    let checker = new VersionChecker(this);
+    let checker = new VersionChecker(this.project);
 
     checker.for('ember-cli').assertAbove('2.0.0');
   }
@@ -83,7 +85,9 @@ let VersionChecker = require('ember-cli-version-checker');
 module.exports = {
   name: 'awesome-addon',
   init() {
-    let checker = new VersionChecker(this);
+    this._super.init.apply(this, arguments);
+
+    let checker = new VersionChecker(this.project);
 
     checker.for('ember-cli').assertAbove('2.0.0', 'To use awesome-addon you must have ember-cli 2.0.0');
   }
@@ -100,7 +104,9 @@ let VersionChecker = require('ember-cli-version-checker');
 module.exports = {
   name: 'awesome-addon',
   init() {
-    let checker = new VersionChecker(this);
+    this._super.init.apply(this, arguments);
+
+    let checker = new VersionChecker(this.project);
     let dep = checker.for('ember-cli');
 
     if (dep.isAbove('2.0.0')) {
@@ -125,7 +131,9 @@ let VersionChecker = require('ember-cli-version-checker');
 module.exports = {
   name: 'awesome-addon',
   init() {
-    let checker = new VersionChecker(this);
+    this._super.init.apply(this, arguments);
+
+    let checker = new VersionChecker(this.project);
     let ember = checker.forEmber();
 
     if (ember.isAbove('2.10.0')) {
@@ -147,7 +155,7 @@ module.exports = {
   init() {
     this._super.init.apply(this, arguments);
 
-    let checker = new VersionChecker(this);
+    let checker = new VersionChecker(this.project);
     let dep = checker.for('ember-cli-qunit');
 
     if (dep.exists()) {
@@ -170,10 +178,35 @@ module.exports = {
   init() {
     this._super.init.apply(this, arguments);
 
-    let checker = new VersionChecker(this);
+    let checker = new VersionChecker(this.project);
     let dep = checker.for('ember-cli-qunit');
 
     // do something with dep.version
   }
 };
 ```
+
+## Note
+
+### How does the version resolution works?
+
+When creating `VersionChecker(addonOrAppOrProject)`, the param needs to have a `root`
+property for the VersionChecker to perform node's
+[module resolution](https://nodejs.org/api/modules.html#modules_all_together).
+
+### Should I use project or parent?
+
+The two primary options that are valid are:
+
+- `new VersionChecker(this.project)`
+- `new VersionChecker(this.parent)`
+
+Which one to use depends on if the addon is trying to find a known top-level library or its parent's.
+
+For example, you may want to check `this.project` root path to find `ember-cli` or `ember-source`,
+which are expected to be top-level.
+Or you may want to check your parent's specific dependency that affects your addon's behavior, you should create
+from `this.parent`.
+
+If you create via `new VersionChecker(this)` in an addon, it will resolve from your addon's path and have your
+own dependency's version instead of top-level dependency's if exists. This will result in unreliable result.
