@@ -186,6 +186,38 @@ module.exports = {
 };
 ```
 
+### assertHighlander
+
+Returns `true` if a dependency is only included once in the Ember project's addons hierarchy.
+It can either be at app top-level or as a nested dependency.
+
+Receives an optional message param to customize the error message.
+
+```js
+let VersionChecker = require('ember-cli-version-checker');
+
+module.exports = {
+  name: 'awesome-addon',
+  included() {
+    this._super.included.apply(this, arguments);
+
+    let checker = new VersionChecker(this.project);
+    let dep = checker.for('<highlanded-addon>');
+
+    dep.assertHighlander('To use awesome-addon you must have only one awesome-addon in the project');
+    /* do things when self is highlander */
+  }
+};
+```
+
+### assertSingleton
+
+Similar to `assertHighlander`, but allow app to "fix" the multiple instances by ensuring them resolving to same root path.
+
+This happens when the dependency in problem specifies a valid version range or the app uses [yarn resolutions](https://yarnpkg.com/lang/en/docs/selective-version-resolutions/).
+
+Useful if the app wants to make sure there's no unexpected assets from the addon on being included but still alow the addon being included in the hierarchy's build process.
+
 ## Note
 
 ### How does the version resolution works?

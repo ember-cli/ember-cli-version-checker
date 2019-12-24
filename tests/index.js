@@ -492,9 +492,93 @@ describe('ember-cli-version-checker', function() {
               },
 
               function(err) {
-                return err.suppressStacktrace;
+                return !err.stack;
               }
             );
+          });
+        });
+
+        describe('Multiple instances check', function() {
+          beforeEach(function() {
+            projectRoot.write({
+              node_modules: {
+                top: buildPackage('top', '1.0.0'),
+                bar: buildPackage('bar', '3.0.0'),
+                'fake-addon': {
+                  node_modules: {
+                    foo: buildPackage('foo', '1.0.0'),
+                    bar: buildPackage('bar', '2.0.0'),
+                  },
+                },
+              },
+            });
+            (scenario === 'project' ? addon : addon.project).addons = [
+              { name: 'top', root: 'node_modules/top' },
+              { name: 'bar', root: 'node_modules/bar' },
+              {
+                name: 'fake-addon',
+                root: 'node_modules/fake-addon',
+                addons: [
+                  {
+                    name: 'foo',
+                    root: 'node_modules/fake-addon/node_modeuls/foo',
+                  },
+                  {
+                    name: 'bar',
+                    root: 'node_modules/fake-addon/node_modules/bar',
+                  },
+                ],
+              },
+            ];
+          });
+
+          it('#_getAllInstances finds all packages from project root', function() {
+            addon.root = projectRoot.path('node_modules/fake-addon');
+
+            let foo = checker.for('foo');
+            assert.equal(foo._getAllInstances().length, 1);
+
+            let bar = checker.for('bar');
+            assert.equal(bar._getAllInstances().length, 2);
+          });
+
+          it('#assertHighlander throws correctly', function() {
+            assert.throws(function() {
+              checker.for('bar').assertHighlander();
+            });
+          });
+
+          it('#assertHighlander throws when multiple instances resolve to same path', function() {
+            // pretender yarn resolution fixed the path
+            (scenario === 'project'
+              ? addon
+              : addon.project
+            ).addons[2].addons[1].root = 'node_modules/bar';
+            assert.throws(function() {
+              checker.for('bar').assertHighlander();
+            });
+          });
+
+          it('#assertHighlander returns true if is highlander', function() {
+            assert.ok(checker.for('foo').assertHighlander());
+            assert.ok(checker.for('top').assertHighlander());
+          });
+
+          it('#assertSingleton throws correctly', function() {
+            assert.throws(function() {
+              checker.for('bar').assertSingleton();
+            });
+          });
+
+          it('#assertSingleton returns true if is singleton', function() {
+            assert.ok(checker.for('foo').assertSingleton());
+            assert.ok(checker.for('top').assertSingleton());
+            // pretender yarn resolution fixed the path
+            (scenario === 'project'
+              ? addon
+              : addon.project
+            ).addons[2].addons[1].root = 'node_modules/bar';
+            assert.ok(checker.for('bar').assertSingleton());
           });
         });
       });
