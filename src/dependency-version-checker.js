@@ -54,11 +54,7 @@ class DependencyVersionChecker {
     let message = _message;
 
     if (!message) {
-      message = `The addon \`${this._parent._addon.name}\` requires the ${
-        this._type
-      } package \`${this.name}\` to be above ${compareVersion}, but you have ${
-        this.version
-      }.`;
+      message = `The addon \`${this._parent._addon.name}\` requires the ${this._type} package \`${this.name}\` to be above ${compareVersion}, but you have ${this.version}.`;
     }
 
     if (!this.isAbove(compareVersion)) {
@@ -78,13 +74,7 @@ class DependencyVersionChecker {
     if (this._getAllInstances().length !== 1) {
       let message =
         _message ||
-        `The addon \`${this._parent._addon.name}\` requires the ${
-          this._type
-        } package \`${
-          this.name
-        }\` to be highlander addon, but there're nested instances. Please ensure a single \`${
-          this.name
-        }\` in the project.`;
+        `The addon \`${this._parent._addon.name}\` requires the ${this._type} package \`${this.name}\` to be highlander addon, but there're nested instances. Please ensure a single \`${this.name}\` in the project.`;
       throw new SilentError(message);
     }
     return true;
@@ -95,11 +85,7 @@ class DependencyVersionChecker {
     if (set.size !== 1) {
       let message =
         _message ||
-        `The addon \`${this._parent._addon.name}\` requires single version of ${
-          this._type
-        } package \`${this.name}\`, but there're multiple. Please resolve \`${
-          this.name
-        }\` to same version.`;
+        `The addon \`${this._parent._addon.name}\` requires single version of ${this._type} package \`${this.name}\`, but there're multiple. Please resolve \`${this.name}\` to same version.`;
       throw new SilentError(message);
     }
     return true;
