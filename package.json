@@ -37,7 +37,7 @@
     "lerna-changelog": "^0.8.2",
     "mocha": "^6.1.4",
     "mocha-eslint": "^5.0.0",
-    "prettier": "^1.17.1"
+    "prettier": "^1.19.1"
   },
   "engines": {
     "node": "6.* || 8.* || >= 10.*"
