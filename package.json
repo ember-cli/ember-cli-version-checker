@@ -26,20 +26,22 @@
     "changelog": "lerna-changelog"
   },
   "dependencies": {
-    "resolve-package-path": "^1.2.7",
-    "semver": "^6.1.1"
+    "resolve-package-path": "^2.0.0",
+    "semver": "^7.1.1"
   },
   "devDependencies": {
     "broccoli-test-helper": "^2.0.0",
-    "co": "^4.6.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "lerna-changelog": "^0.8.2",
-    "mocha": "^6.1.4",
-    "mocha-eslint": "^5.0.0",
+    "lerna-changelog": "^1.0.0",
+    "mocha": "^7.0.0",
+    "mocha-eslint": "^6.0.0",
     "prettier": "^1.19.1"
   },
   "engines": {
-    "node": "6.* || 8.* || >= 10.*"
+    "node": "10.* || >= 12.*"
+  },
+  "volta": {
+    "node": "12.14.1"
   }
 }
