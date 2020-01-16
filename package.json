@@ -27,21 +27,21 @@
   },
   "dependencies": {
     "resolve-package-path": "^2.0.0",
-    "semver": "^7.1.1"
+    "semver": "^6.3.0"
   },
   "devDependencies": {
     "broccoli-test-helper": "^2.0.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "lerna-changelog": "^1.0.0",
+    "lerna-changelog": "^0.8.3",
     "mocha": "^7.0.0",
     "mocha-eslint": "^6.0.0",
     "prettier": "^1.19.1"
   },
   "engines": {
-    "node": "10.* || >= 12.*"
+    "node": "8.* || 10.* || >= 12.*"
   },
   "volta": {
-    "node": "12.14.1"
+    "node": "8.17.0"
   }
 }
