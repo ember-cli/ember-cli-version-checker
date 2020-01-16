@@ -1,10 +1,9 @@
 'use strict';
-/*global Set */
 const fs = require('fs');
 const semver = require('semver');
 const SilentError = require('silent-error');
 const getProject = require('./get-project');
-const discoverAddons = require('./discover-addons');
+const isSingletonInProject = require('./is-singleton-in-project');
 
 function getVersionFromJSONFile(filePath) {
   if (fs.existsSync(filePath)) {
@@ -63,15 +62,7 @@ class DependencyVersionChecker {
   }
 
   isSingleton() {
-    if (this._isSingleton) {
-      return this._isSingleton;
-    }
-    let allInstances = discoverAddons(
-      getProject(this._parent._addon),
-      this.name
-    );
-    let uniqueInstances = new Set(allInstances.map(i => i.root));
-    return (this._isSingleton = uniqueInstances.size === 1);
+    return isSingletonInProject(this.name, getProject(this._parent._addon));
   }
 
   assertSingleton(_message) {
