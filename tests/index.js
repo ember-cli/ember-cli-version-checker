@@ -4,7 +4,6 @@
 
 const assert = require('assert');
 const VersionChecker = require('..');
-const co = require('co');
 const execSync = require('child_process').execSync;
 const semver = require('semver');
 
@@ -63,17 +62,13 @@ describe('ember-cli-version-checker', function() {
     }
   }
 
-  beforeEach(
-    co.wrap(function*() {
-      projectRoot = yield createTempDir();
-    })
-  );
+  beforeEach(async function() {
+    projectRoot = await createTempDir();
+  });
 
-  afterEach(
-    co.wrap(function*() {
-      yield projectRoot.dispose();
-    })
-  );
+  afterEach(async function() {
+    await projectRoot.dispose();
+  });
 
   for (let scenario of ['addon', 'project']) {
     describe(`with ${scenario}`, function() {
