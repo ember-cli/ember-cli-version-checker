@@ -535,7 +535,7 @@ describe('ember-cli-version-checker', function() {
           it('#assertSingleton throws correctly', function() {
             assert.throws(function() {
               checker.for('bar').assertSingleton();
-            });
+            }, /\[[\w\-?]+\] requires single version of npm package `bar`, but there're multiple\. Please resolve `bar` to same version/);
           });
 
           it('#isSingleton detects singleton', function() {

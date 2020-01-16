@@ -69,7 +69,7 @@ class DependencyVersionChecker {
     if (!this.isSingleton()) {
       let message =
         _message ||
-        `The addon \`${this._parent._addon.name}\` requires single version of ${this._type} package \`${this.name}\`, but there're multiple. Please resolve \`${this.name}\` to same version.`;
+        `[${this._parent._addon.name}] requires single version of ${this._type} package \`${this.name}\`, but there're multiple. Please resolve \`${this.name}\` to same version.`;
       throw new SilentError(message);
     }
   }
