@@ -1,3 +1,13 @@
+## v4.0.0 (2020-01-16)
+
+#### :boom: Breaking Change & :rocket: Enhancement
+* [#163](https://github.com/ember-cli/ember-cli-version-checker/pull/163) drop unsupported node versions and upgrade all dependencies ([@stefanpenner](https://github.com/stefanpenner))
+
+#### Committers: 3
+- Stefan Penner ([@stefanpenner](https://github.com/stefanpenner))
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+- [@dependabot-preview[bot]](https://github.com/apps/dependabot-preview)
+
 ## v3.1.3 (2019-03-26)
 
 #### :bug: Bug Fix
