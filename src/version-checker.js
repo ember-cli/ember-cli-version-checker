@@ -1,13 +1,9 @@
 'use strict';
 
-/* eslint-env node */
-
-const BowerDependencyVersionChecker = require('./bower-dependency-version-checker');
-const NPMDependencyVersionChecker = require('./npm-dependency-version-checker');
-const getProject = require('./get-project');
+const DependencyVersionChecker = require('./dependency-version-checker');
 const ProjectWideDependencyChecker = require('./project-wide-dependency-checker');
 
-class VersionChecker {
+module.exports = class VersionChecker {
   constructor(addon) {
     this._addon = addon;
   }
@@ -18,23 +14,17 @@ class VersionChecker {
 
   for(name, type) {
     if (type === 'bower') {
-      return new BowerDependencyVersionChecker(this, name);
+      throw new Error(
+        '[ember-cli-version-checker] Bower is no longer supported'
+      );
     } else {
-      return new NPMDependencyVersionChecker(this, name);
+      return new DependencyVersionChecker(this, name);
     }
   }
 
   forEmber() {
-    let project = getProject(this._addon);
-    let checker = project === this._addon ? this : new VersionChecker(project);
-    let emberVersionChecker = checker.for('ember-source', 'npm');
-
-    if (emberVersionChecker.version) {
-      return emberVersionChecker;
-    }
-
-    return checker.for('ember', 'bower');
+    throw new Error(
+      `[ember-cli-version-checker] 'checker.forEmber' has been removed, please use 'checker.for(\`ember-source\`)'`
+    );
   }
-}
-
-module.exports = VersionChecker;
+};

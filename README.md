@@ -118,31 +118,6 @@ module.exports = {
 };
 ```
 
-### forEmber
-
-Since ember introduced the `ember-source` from NPM, ember has two ways to be
-shipped. One from bower `ember` and other from NPM `ember-source`. The
-function `forEmber` will look for `ember-source` from NPM, if it doesn't
-find it, it will look for `ember` in bower.
-
-```javascript
-let VersionChecker = require('ember-cli-version-checker');
-
-module.exports = {
-  name: 'awesome-addon',
-  init() {
-    this._super.init.apply(this, arguments);
-
-    let checker = new VersionChecker(this.project);
-    let ember = checker.forEmber();
-
-    if (ember.isAbove('2.10.0')) {
-      /* deal with 2.10.0 stuff */
-    };
-  }
-};
-```
-
 ### exists
 
 Returns `true` or `false` indicating if the dependency exists (at any version).

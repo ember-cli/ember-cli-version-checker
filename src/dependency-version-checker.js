@@ -1,6 +1,8 @@
 'use strict';
 const fs = require('fs');
 const semver = require('semver');
+const getProject = require('./get-project');
+const resolvePackage = require('resolve-package-path');
 
 function getVersionFromJSONFile(filePath) {
   if (fs.existsSync(filePath)) {
@@ -21,6 +23,9 @@ class DependencyVersionChecker {
   constructor(parent, name) {
     this._parent = parent;
     this.name = name;
+    let addon = this._parent._addon;
+    let basedir = addon.root || getProject(addon).root;
+    this._jsonPath = resolvePackage(this.name, basedir);
   }
 
   get version() {
@@ -48,27 +53,23 @@ class DependencyVersionChecker {
 
   assertAbove(compareVersion, _message) {
     let message = _message;
-
-    if (!message) {
-      message = `The addon \`${this._parent._addon.name}\` requires the ${this._type} package \`${this.name}\` to be above ${compareVersion}, but you have ${this.version}.`;
-    }
-
     if (!this.isAbove(compareVersion)) {
-      const error = new Error(message);
-      error.suppressStacktrace = true;
-      throw error;
+      if (!message) {
+        const parentAddon = this._parent._addon;
+        message = `The addon \`${parentAddon.name}\` @ \`${parentAddon.root}\` requires the npm package \`${this.name}\` to be above ${compareVersion}, but you have ${this.version}.`;
+      }
+      throw new Error(message);
     }
   }
 }
 
-let semverMethods = ['gt', 'lt', 'gte', 'lte', 'eq', 'neq', 'satisfies'];
-semverMethods.forEach(function(method) {
+for (let method of ['gt', 'lt', 'gte', 'lte', 'eq', 'neq', 'satisfies']) {
   DependencyVersionChecker.prototype[method] = function(range) {
     if (!this.version) {
       return method === 'neq';
     }
     return semver[method](this.version, range);
   };
-});
+}
 
 module.exports = DependencyVersionChecker;

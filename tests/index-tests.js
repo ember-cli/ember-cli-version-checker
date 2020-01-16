@@ -27,15 +27,6 @@ function buildPackage(name, version) {
   };
 }
 
-function buildBowerPackage(name, version, disableBowerVersion) {
-  return {
-    '.bower.json': disableBowerVersion
-      ? `{"name": "${name}"}`
-      : buildPackageJSON(name, version),
-    'bower.json': buildPackageJSON(name, version),
-  };
-}
-
 function buildVersionCheckerBin(addon) {
   return `
     const VersionChecker = require('ember-cli-version-checker');
@@ -52,7 +43,6 @@ describe('ember-cli-version-checker', function() {
   class FakeProject {
     constructor() {
       this.root = projectRoot.path();
-      this.bowerDirectory = 'bower_components';
       this._addonsInitialized = true;
     }
 
@@ -105,50 +95,12 @@ describe('ember-cli-version-checker', function() {
       let FakeClass = scenario === 'addon' ? FakeAddon : FakeProject;
 
       describe('VersionChecker#forEmber', function() {
-        let addon, checker, projectContents;
-
-        beforeEach(function() {
-          projectContents = {
-            bower_components: {
-              ember: buildBowerPackage('ember', '1.13.2'),
-            },
-            node_modules: {
-              'ember-source': buildPackage('ember-source', '2.10.0'),
-            },
-          };
-
-          addon = new FakeClass();
-
-          checker = new VersionChecker(addon);
-        });
-
-        describe('version', function() {
-          if (scenario === 'addon') {
-            it('checks the project not the addon', function() {
-              projectContents.node_modules['fake-addon'] = {
-                node_modules: {
-                  'ember-source': buildPackage('ember-source', '3.1.0'),
-                },
-              };
-              projectRoot.write(projectContents);
-              let thing = checker.forEmber();
-              assert.equal(thing.version, '2.10.0');
-            });
-          }
-
-          it('returns the bower version if ember-source is not present in npm', function() {
-            delete projectContents['node_modules'];
-            projectRoot.write(projectContents);
-
-            let thing = checker.forEmber();
-            assert.equal(thing.version, '1.13.2');
-          });
-
-          it('returns the ember-source version before looking for ember in bower', function() {
-            projectRoot.write(projectContents);
-            let thing = checker.forEmber();
-            assert.equal(thing.version, '2.10.0');
-          });
+        it('has been removed', function() {
+          const checker = new VersionChecker({});
+          assert.throws(
+            () => checker.forEmber(),
+            /'checker.forEmber' has been removed/
+          );
         });
       });
 
@@ -156,9 +108,6 @@ describe('ember-cli-version-checker', function() {
         let addon, checker;
         beforeEach(function() {
           projectRoot.write({
-            bower_components: {
-              ember: buildBowerPackage('ember', '1.12.1'),
-            },
             node_modules: {
               ember: buildPackage('ember', '2.0.0'),
             },
@@ -218,10 +167,11 @@ describe('ember-cli-version-checker', function() {
             assert.equal(thing.version, '2.0.0');
           });
 
-          it('allows `bower`', function() {
-            let thing = checker.for('ember', 'bower');
-
-            assert.equal(thing.version, '1.12.1');
+          it('throws if `bower` is used, as it is no longer supported', function() {
+            assert.throws(
+              () => checker.for('ember', 'bower'),
+              /Bower is no longer supported/
+            );
           });
         });
 
@@ -239,34 +189,10 @@ describe('ember-cli-version-checker', function() {
         });
 
         describe('version', function() {
-          it('can return a bower version', function() {
-            let thing = checker.for('ember', 'bower');
-
-            assert.equal(thing.version, '1.12.1');
-          });
-
-          it('can return a fallback bower version for non-tagged releases', function() {
-            projectRoot.write({
-              bower_components: {
-                ember: buildBowerPackage('ember', '1.13.2', true),
-              },
-            });
-
-            let thing = checker.for('ember', 'bower');
-
-            assert.equal(thing.version, '1.13.2');
-          });
-
           it('can return a npm version', function() {
             let thing = checker.for('ember', 'npm');
 
             assert.equal(thing.version, '2.0.0');
-          });
-
-          it('does not exist in bower_components', function() {
-            let thing = checker.for('does-not-exist-dummy', 'bower');
-
-            assert.equal(thing.version, null);
           });
 
           it('does not exist in nodeModulesPath', function() {
@@ -308,38 +234,6 @@ describe('ember-cli-version-checker', function() {
             let thing = checker.for('ember', 'npm');
 
             assert.equal(thing.isAbove('99.0.0'), false);
-          });
-
-          it('returns true on beta releases if version is above the specified range', function() {
-            projectRoot.write({
-              bower_components: {
-                ember: buildBowerPackage(
-                  'ember',
-                  '2.3.0-beta.2+41030996',
-                  true
-                ),
-              },
-            });
-
-            let thing = checker.for('ember', 'bower');
-
-            assert.equal(thing.isAbove('2.2.0'), true);
-          });
-
-          it('returns false on beta releases if version is below the specified range', function() {
-            projectRoot.write({
-              bower_components: {
-                ember: buildBowerPackage(
-                  'ember',
-                  '2.3.0-beta.2+41030996',
-                  true
-                ),
-              },
-            });
-
-            let thing = checker.for('ember', 'bower');
-
-            assert.equal(thing.isAbove('2.3.0'), false);
           });
 
           it('returns false if the dependency does not exist', function() {
@@ -509,22 +403,6 @@ describe('ember-cli-version-checker', function() {
             assert.throws(function() {
               thing.assertAbove('999.0.0', message);
             }, new RegExp(message));
-          });
-
-          it('throws a silent error', function() {
-            let message =
-              'Must use at least Ember CLI 0.1.2 to use xyz feature';
-            let thing = checker.for('ember', 'npm');
-
-            assert.throws(
-              function() {
-                thing.assertAbove('999.0.0', message);
-              },
-
-              function(err) {
-                return err.suppressStacktrace;
-              }
-            );
           });
         });
 
