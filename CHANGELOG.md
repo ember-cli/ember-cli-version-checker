@@ -1,3 +1,12 @@
+## v4.0.1 (2020-01-16)
+
+#### :rocket: Enhancement
+* [#164](https://github.com/ember-cli/ember-cli-version-checker/pull/164) Restore node 8 for a cycle, to ease some upgrades. ([@stefanpenner](https://github.com/stefanpenner))
+
+#### Committers: 1
+- Stefan Penner ([@stefanpenner](https://github.com/stefanpenner))
+
+
 ## v4.0.0 (2020-01-16)
 
 #### :boom: Breaking Change & :rocket: Enhancement
