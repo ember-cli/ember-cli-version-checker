@@ -186,7 +186,7 @@ module.exports = {
 };
 ```
 
-### isUnique
+### hasSingleImplementation
 
 Returns `true` if there is only single implementation in node_modules of the
 addon. It can either be at app top-level or as a nested dependency. This API
@@ -203,44 +203,82 @@ the addon on being included but still alow the addon being included in the
 hierarchy's build process.
 
 ```js
-let VersionChecker = require('ember-cli-version-checker');
+const VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
   included() {
     this._super.included.apply(this, arguments);
 
-    let checker = new VersionChecker(this.project);
-    let dep = checker.for('<my-addon>');
+    let checker = VersionChecker.forProject(this.project);
 
-    if (dep.isUnique()) {
+    if (checker.hasSingleImplementation('<my-addon>')) {
       /* do things when <my-addon> is unique */
     }
   }
 };
 ```
 
-### assertUnique
+### assertSingleImplementation
 
 Throws an error if the addon isn't unique, and receives an optional message
 param to customize the error message.
 
 ```js
-let VersionChecker = require('ember-cli-version-checker');
+const VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'awesome-addon',
   included() {
     this._super.included.apply(this, arguments);
 
-    let checker = new VersionChecker(this.project);
-    let dep = checker.for('<my-addon>');
+    let checker = VersionChecker.forProject(this.project);
 
-    dep.assertUnique('Please make sure <my-addon> is unique, please correct and here is a helpful message!');
+    checker.assertSingleImplementation('<my-addon>', 'Please make sure <my-addon> has only one implementation, please correct and here is a helpful message!');
   }
 };
 ```
 
+### filterAddonsByName
+
+Find all addon instances with the same name
+
+```js
+const VersionChecker = require('ember-cli-version-checker');
+
+module.exports = {
+  name: 'awesome-addon',
+  included() {
+    this._super.included.apply(this, arguments);
+
+    let checker = VersionChecker.forProject(this.project);
+
+    checker.filterAddonsByName('<my-addon>'); // => an array of addon instances who have the name `<my-addon>`
+  }
+};
+```
+
+
+### allAddons
+
+An iterator which gives acccess to all addon instances
+
+```js
+const VersionChecker = require('ember-cli-version-checker');
+
+module.exports = {
+  name: 'awesome-addon',
+  included() {
+    this._super.included.apply(this, arguments);
+
+    let checker = VersionChecker.forProject(this.project);
+
+    for (let { name, root } = checker.allAddons()) {
+      // access to the add-on, in this case root + name
+    }
+  }
+};
+```
 
 ## Note
 

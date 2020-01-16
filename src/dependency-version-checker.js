@@ -1,9 +1,6 @@
 'use strict';
 const fs = require('fs');
 const semver = require('semver');
-const SilentError = require('silent-error');
-const getProject = require('./get-project');
-const isUniqueInProject = require('./is-unique-in-project');
 
 function getVersionFromJSONFile(filePath) {
   if (fs.existsSync(filePath)) {
@@ -57,20 +54,9 @@ class DependencyVersionChecker {
     }
 
     if (!this.isAbove(compareVersion)) {
-      throw new SilentError(message);
-    }
-  }
-
-  isUnique() {
-    return isUniqueInProject(this.name, getProject(this._parent._addon));
-  }
-
-  assertUnique(_message) {
-    if (!this.isUnique()) {
-      let message =
-        _message ||
-        `[${this._parent._addon.name}] requires unique version of ${this._type} package \`${this.name}\`, but there're multiple. Please resolve \`${this.name}\` to same version.`;
-      throw new SilentError(message);
+      const error = new Error(message);
+      error.suppressStacktrace = true;
+      throw error;
     }
   }
 }

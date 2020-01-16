@@ -7,6 +7,10 @@ const VersionChecker = require('..');
 const execSync = require('child_process').execSync;
 const semver = require('semver');
 
+function isObject(x) {
+  return typeof x === 'object' && x !== null;
+}
+
 const createTempDir = require('broccoli-test-helper').createTempDir;
 const ROOT = process.cwd();
 
@@ -49,6 +53,7 @@ describe('ember-cli-version-checker', function() {
     constructor() {
       this.root = projectRoot.path();
       this.bowerDirectory = 'bower_components';
+      this._addonsInitialized = true;
     }
 
     isEmberCLIProject() {}
@@ -68,6 +73,31 @@ describe('ember-cli-version-checker', function() {
 
   afterEach(async function() {
     await projectRoot.dispose();
+  });
+
+  describe('VersionChecker.forProject', function() {
+    it('errors if given a project without initialized addons', function() {
+      assert.throws(() => {
+        VersionChecker.forProject();
+      }, /forProject must be provided an ember-cli project class/);
+
+      assert.throws(() => {
+        VersionChecker.forProject(null);
+      }, /forProject must be provided an ember-cli project class/);
+
+      assert.throws(() => {
+        VersionChecker.forProject({});
+      }, /forProject must be provided an ember-cli project class/);
+
+      assert.throws(() => {
+        VersionChecker.forProject({ isEmberCLIProject() {} });
+      }, /forProject must be provided an project instance whos addons have been initialized./);
+
+      VersionChecker.forProject({
+        isEmberCLIProject() {},
+        _addonsInitialized: true,
+      });
+    });
   });
 
   for (let scenario of ['addon', 'project']) {
@@ -492,14 +522,19 @@ describe('ember-cli-version-checker', function() {
               },
 
               function(err) {
-                return !err.stack;
+                return err.suppressStacktrace;
               }
             );
           });
         });
 
         describe('Multiple instances check', function() {
+          if (scenario !== 'project') {
+            return;
+          }
+          let checker;
           beforeEach(function() {
+            checker = VersionChecker.forProject(addon);
             projectRoot.write({
               node_modules: {
                 top: buildPackage('top', '1.0.0'),
@@ -532,19 +567,53 @@ describe('ember-cli-version-checker', function() {
             ];
           });
 
-          it('#assertUnique throws correctly', function() {
-            assert.throws(function() {
-              checker.for('bar').assertUnique();
-            }, /\[[\w\-?]+\] requires unique version of npm package `bar`, but there're multiple\. Please resolve `bar` to same version/);
+          it('validates VersionChecker.forProject only takes a project', function() {
+            assert.throws(() => {
+              VersionChecker.forProject({});
+            }, /forProject must be provided an ember-cli project class/);
           });
 
-          it('#isUnique detects singleton', function() {
-            assert.ok(checker.for('foo').isUnique());
-            assert.ok(checker.for('top').isUnique());
+          it('#assertSingleImplementation throws correctly', function() {
+            assert.throws(() => {
+              checker.assertSingleImplementation('bar');
+            }, /This project requires a single implementation version of the npm package `bar`, but there're multiple. Please resolve `bar` to same version./);
+            assert.throws(() => {
+              checker.assertSingleImplementation('bar');
+            }, / - bar @ node_modules\/fake-addon\/node_modules\/bar/);
+            assert.throws(() => {
+              checker.assertSingleImplementation('bar');
+            }, / - bar @ node_modules\/bar/);
           });
 
-          it('#isUnique finds duplication and can be fixed by resolution', function() {
-            assert.ok(!checker.for('bar').isUnique());
+          it('#hasSingleImplementation detects singleton', function() {
+            assert.ok(checker.hasSingleImplementation('foo'));
+            assert.ok(checker.hasSingleImplementation('top'));
+          });
+
+          it('has a working #filterAddonsByName', () => {
+            assert.equal(checker.filterAddonsByName('foo').length, 1);
+            assert.equal(checker.filterAddonsByName('top').length, 1);
+            assert.equal(checker.filterAddonsByName('bar').length, 2);
+            assert.equal(
+              checker.filterAddonsByName('never-ever-ever').length,
+              0
+            );
+
+            assert.equal(
+              checker.filterAddonsByName('bar').filter(isObject).length,
+              2
+            );
+          });
+
+          it('#hasSingleImplementation finds duplication and can be fixed by resolution', function() {
+            assert.ok(!checker.hasSingleImplementation('bar'));
+          });
+
+          it('has a functioning allAddons iterator', function() {
+            assert.deepEqual(
+              [...checker.allAddons()].map(x => x.name),
+              ['top', 'bar', 'fake-addon', 'foo', 'bar']
+            );
           });
         });
       });
