@@ -186,16 +186,21 @@ module.exports = {
 };
 ```
 
-### isSingleton
+### isUnique
 
-Returns `true` if there is only single instance in node_modules of the addon.
-It can either be at app top-level or as a nested dependency. This API does not work with non-addon npm dependency.
+Returns `true` if there is only single implementation in node_modules of the
+addon. It can either be at app top-level or as a nested dependency. This API
+does not work with non-addon npm dependency.
 
-A singleton addon can still be included multiple times if it's a nested dependency,
-but they are guaranteed to be resolved to same version in node_modules.
-This happens when the dependency in problem specifies a valid version range or the app uses [yarn resolutions](https://yarnpkg.com/lang/en/docs/selective-version-resolutions/).
+A unique addon can still be included multiple times if it's a nested
+dependency, but they are guaranteed to be resolved to same version in
+node_modules. This happens when the dependency in problem specifies a valid
+version range or the app uses [yarn
+  resolutions](https://yarnpkg.com/lang/en/docs/selective-version-resolutions/).
 
-This is useful if the app wants to make sure there's no unexpected assets from the addon on being included but still alow the addon being included in the hierarchy's build process.
+This is useful if the app wants to make sure there's no unexpected assets from
+the addon on being included but still alow the addon being included in the
+hierarchy's build process.
 
 ```js
 let VersionChecker = require('ember-cli-version-checker');
@@ -208,16 +213,17 @@ module.exports = {
     let checker = new VersionChecker(this.project);
     let dep = checker.for('<my-addon>');
 
-    if (dep.isSingleton()) {
-      /* do things when <my-addon> is singleton*/
+    if (dep.isUnique()) {
+      /* do things when <my-addon> is unique */
     }
   }
 };
 ```
 
-### assertSingleton
+### assertUnique
 
-Throws an error if the addon isn't a singleton, and receives an optional message param to customize the error message.
+Throws an error if the addon isn't unique, and receives an optional message
+param to customize the error message.
 
 ```js
 let VersionChecker = require('ember-cli-version-checker');
@@ -230,7 +236,7 @@ module.exports = {
     let checker = new VersionChecker(this.project);
     let dep = checker.for('<my-addon>');
 
-    dep.assertSingleton('Please make sure <my-addon> is singleton by using yarn resolution!');
+    dep.assertUnique('Please make sure <my-addon> is unique, please correct and here is a helpful message!');
   }
 };
 ```

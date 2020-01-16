@@ -532,19 +532,19 @@ describe('ember-cli-version-checker', function() {
             ];
           });
 
-          it('#assertSingleton throws correctly', function() {
+          it('#assertUnique throws correctly', function() {
             assert.throws(function() {
-              checker.for('bar').assertSingleton();
-            }, /\[[\w\-?]+\] requires single version of npm package `bar`, but there're multiple\. Please resolve `bar` to same version/);
+              checker.for('bar').assertUnique();
+            }, /\[[\w\-?]+\] requires unique version of npm package `bar`, but there're multiple\. Please resolve `bar` to same version/);
           });
 
-          it('#isSingleton detects singleton', function() {
-            assert.ok(checker.for('foo').isSingleton());
-            assert.ok(checker.for('top').isSingleton());
+          it('#isUnique detects singleton', function() {
+            assert.ok(checker.for('foo').isUnique());
+            assert.ok(checker.for('top').isUnique());
           });
 
-          it('#isSingleton finds duplication and can be fixed by resolution', function() {
-            assert.ok(!checker.for('bar').isSingleton());
+          it('#isUnique finds duplication and can be fixed by resolution', function() {
+            assert.ok(!checker.for('bar').isUnique());
           });
         });
       });

@@ -2,17 +2,17 @@
 
 /* global WeakMap, Map, Set */
 
-const SINGLETON_ADDON_MAP = new WeakMap();
+const UNIQUE_ADDON_MAP = new WeakMap();
 
 /**
  * Traverse the project's addons tree to determine singleton root,
  * cache the boolean result in project x addonName matrix
  */
 function isSingletonInProject(name, project) {
-  if (!SINGLETON_ADDON_MAP.has(project)) {
-    SINGLETON_ADDON_MAP.set(project, new Map());
+  if (!UNIQUE_ADDON_MAP.has(project)) {
+    UNIQUE_ADDON_MAP.set(project, new Map());
   }
-  let map = SINGLETON_ADDON_MAP.get(project);
+  let map = UNIQUE_ADDON_MAP.get(project);
   if (map.has(name)) {
     return map.get(name);
   }

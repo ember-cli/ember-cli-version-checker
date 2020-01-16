@@ -3,7 +3,7 @@ const fs = require('fs');
 const semver = require('semver');
 const SilentError = require('silent-error');
 const getProject = require('./get-project');
-const isSingletonInProject = require('./is-singleton-in-project');
+const isUniqueInProject = require('./is-unique-in-project');
 
 function getVersionFromJSONFile(filePath) {
   if (fs.existsSync(filePath)) {
@@ -61,15 +61,15 @@ class DependencyVersionChecker {
     }
   }
 
-  isSingleton() {
-    return isSingletonInProject(this.name, getProject(this._parent._addon));
+  isUnique() {
+    return isUniqueInProject(this.name, getProject(this._parent._addon));
   }
 
-  assertSingleton(_message) {
-    if (!this.isSingleton()) {
+  assertUnique(_message) {
+    if (!this.isUnique()) {
       let message =
         _message ||
-        `[${this._parent._addon.name}] requires single version of ${this._type} package \`${this.name}\`, but there're multiple. Please resolve \`${this.name}\` to same version.`;
+        `[${this._parent._addon.name}] requires unique version of ${this._type} package \`${this.name}\`, but there're multiple. Please resolve \`${this.name}\` to same version.`;
       throw new SilentError(message);
     }
   }
