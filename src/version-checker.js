@@ -5,10 +5,15 @@
 const BowerDependencyVersionChecker = require('./bower-dependency-version-checker');
 const NPMDependencyVersionChecker = require('./npm-dependency-version-checker');
 const getProject = require('./get-project');
+const ProjectWideDependencyChecker = require('./project-wide-dependency-checker');
 
 class VersionChecker {
   constructor(addon) {
     this._addon = addon;
+  }
+
+  static forProject(project) {
+    return new ProjectWideDependencyChecker(project);
   }
 
   for(name, type) {

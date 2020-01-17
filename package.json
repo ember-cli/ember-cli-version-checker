@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "resolve-package-path": "^2.0.0",
-    "semver": "^6.3.0"
+    "semver": "^6.3.0",
+    "silent-error": "^1.1.1"
   },
   "devDependencies": {
     "broccoli-test-helper": "^2.0.0",
@@ -37,6 +38,10 @@
     "mocha": "^7.0.0",
     "mocha-eslint": "^6.0.0",
     "prettier": "^1.19.1"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "singleQuote": true
   },
   "engines": {
     "node": "8.* || 10.* || >= 12.*"

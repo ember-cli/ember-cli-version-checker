@@ -1,5 +1,4 @@
 'use strict';
-
 const fs = require('fs');
 const semver = require('semver');
 
@@ -55,10 +54,8 @@ class DependencyVersionChecker {
     }
 
     if (!this.isAbove(compareVersion)) {
-      let error = new Error(message);
-
+      const error = new Error(message);
       error.suppressStacktrace = true;
-
       throw error;
     }
   }
