@@ -1,3 +1,11 @@
+##  v4.1.0 (2020-01-17)
+
+#### :rocket: Enhancement
+* [#156](https://github.com/ember-cli/ember-cli-version-checker/pull/156) Add hasSingleImplementation, assertHasSingleImplementation (highlander) ([@xg-wang](https://github.com/xg-wang))
+
+#### Committers: 1
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+
 ## v4.0.1 (2020-01-16)
 
 #### :rocket: Enhancement
