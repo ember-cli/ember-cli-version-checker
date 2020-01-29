@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "broccoli-test-helper": "^2.0.0",
-    "eslint-config-prettier": "^6.9.0",
+    "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.1.2",
     "lerna-changelog": "^0.8.3",
     "mocha": "^7.0.1",
