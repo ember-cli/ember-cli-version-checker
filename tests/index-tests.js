@@ -453,6 +453,9 @@ describe('ember-cli-version-checker', function() {
 
           it('#assertSingleImplementation throws correctly', function() {
             assert.throws(() => {
+              checker.assertSingleImplementation('--no-such-addon--');
+            }, /This project requires a single implementation version of the npm package `--no-such-addon--`, but none where found./);
+            assert.throws(() => {
               checker.assertSingleImplementation('bar');
             }, /This project requires a single implementation version of the npm package `bar`, but there're multiple. Please resolve `bar` to same version./);
             assert.throws(() => {
