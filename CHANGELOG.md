@@ -1,3 +1,19 @@
+##  v5.0.0 (2020-02-14)
+
+#### :boom: Breaking Change
+* [#165](https://github.com/ember-cli/ember-cli-version-checker/pull/165) Remove Un-needed features ([@stefanpenner](https://github.com/stefanpenner))
+* [#170](https://github.com/ember-cli/ember-cli-version-checker/pull/170) Drop node 8 support ([@stefanpenner](https://github.com/stefanpenner))
+
+#### :rocket: Enhancement
+* [#173](https://github.com/ember-cli/ember-cli-version-checker/pull/173) Add partial windows coverage ([@stefanpenner](https://github.com/stefanpenner))
+* [#172](https://github.com/ember-cli/ember-cli-version-checker/pull/172) use GH Actions ([@stefanpenner](https://github.com/stefanpenner))
+* [#171](https://github.com/ember-cli/ember-cli-version-checker/pull/171) Improve error message ([@stefanpenner](https://github.com/stefanpenner))
+
+#### Committers: 2
+- Stefan Penner ([@stefanpenner](https://github.com/stefanpenner))
+- [@dependabot-preview[bot]](https://github.com/apps/dependabot-preview)
+
+
 ##  v4.1.0 (2020-01-17)
 
 #### :rocket: Enhancement
