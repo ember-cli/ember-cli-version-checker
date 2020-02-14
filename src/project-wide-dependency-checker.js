@@ -61,10 +61,16 @@ module.exports = class ProjectWideDependencyChecker {
       return true;
     }
 
-    let message =
-      customMessage ||
-      `[ember-cli-version-checker] This project requires a single implementation version of the npm package \`${name}\`, but there're multiple. Please resolve \`${name}\` to same version:`;
-
+    let message;
+    if (uniqueImplementations.size < 1) {
+      message = `[ember-cli-version-checker] This project requires a single implementation version of the npm package \`${name}\`, but none where found.`;
+    } else {
+      if (customMessage) {
+        message = customMessage;
+      } else {
+        message = `[ember-cli-version-checker] This project requires a single implementation version of the npm package \`${name}\`, but there're multiple. Please resolve \`${name}\` to same version:`;
+      }
+    }
     for (let root of uniqueImplementations) {
       message += `\n - ${name} @ ${root}`;
     }
