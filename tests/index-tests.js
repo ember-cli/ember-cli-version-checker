@@ -556,11 +556,17 @@ describe('ember-cli-version-checker', function() {
                 addons: [
                   {
                     name: 'foo',
-                    root: 'node_modules/fake-addon/node_modeuls/foo',
+                    root: 'node_modules/fake-addon/node_modules/foo',
                   },
                   {
                     name: 'bar',
                     root: 'node_modules/fake-addon/node_modules/bar',
+                    addons: [
+                      {
+                        name: 'foo',
+                        root: 'node_modules/fake-addon/node_modules/foo',
+                      },
+                    ],
                   },
                 ],
               },
@@ -591,7 +597,7 @@ describe('ember-cli-version-checker', function() {
           });
 
           it('has a working #filterAddonsByName', () => {
-            assert.equal(checker.filterAddonsByName('foo').length, 1);
+            assert.equal(checker.filterAddonsByName('foo').length, 2);
             assert.equal(checker.filterAddonsByName('top').length, 1);
             assert.equal(checker.filterAddonsByName('bar').length, 2);
             assert.equal(
@@ -612,7 +618,7 @@ describe('ember-cli-version-checker', function() {
           it('has a functioning allAddons iterator', function() {
             assert.deepEqual(
               [...checker.allAddons()].map(x => x.name),
-              ['top', 'bar', 'fake-addon', 'foo', 'bar']
+              ['top', 'bar', 'fake-addon', 'foo', 'bar', 'foo']
             );
           });
         });
