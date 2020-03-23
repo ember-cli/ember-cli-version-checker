@@ -12,18 +12,22 @@
   },
   "license": "MIT",
   "author": "Robert Jackson <me@rwjblue.com>",
-  "files": [
-    "src",
-    "index.js"
-  ],
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
+  "files": [
+    "src",
+    "index.js"
+  ],
   "scripts": {
+    "changelog": "lerna-changelog",
     "test": "mocha tests",
-    "test:debug": "mocha debug tests",
-    "changelog": "lerna-changelog"
+    "test:debug": "mocha debug tests"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
   },
   "dependencies": {
     "resolve-package-path": "^2.0.0",
@@ -37,14 +41,30 @@
     "lerna-changelog": "^1.0.1",
     "mocha": "^7.1.1",
     "mocha-eslint": "^6.0.0",
-    "prettier": "^1.19.1"
-  },
-  "prettier": {
-    "trailingComma": "es5",
-    "singleQuote": true
+    "prettier": "^1.19.1",
+    "release-it": "^13.1.1",
+    "release-it-lerna-changelog": "^2.1.0"
   },
   "engines": {
     "node": "10.* || >= 12.*"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "release-it": {
+    "plugins": {
+      "release-it-lerna-changelog": {
+        "infile": "CHANGELOG.md",
+        "launchEditor": true
+      }
+    },
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "tokenRef": "GITHUB_AUTH"
+    }
   },
   "volta": {
     "node": "10.19.0"
