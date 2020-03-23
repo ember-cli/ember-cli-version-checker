@@ -22,7 +22,7 @@ function hasSingleImplementation(targetName, project) {
 
   for (let { name, root } of allAddons(project)) {
     if (targetName === name) {
-      if (lastRoot !== undefined) {
+      if (lastRoot !== undefined && lastRoot !== root) {
         map.set(targetName, false);
         return false;
       } else {
