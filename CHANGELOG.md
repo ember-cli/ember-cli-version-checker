@@ -1,3 +1,16 @@
+## v5.0.2 (2020-03-23)
+
+#### :bug: Bug Fix
+* [#178](https://github.com/ember-cli/ember-cli-version-checker/pull/178) Fix hasSingleImplementation ([@xg-wang](https://github.com/xg-wang))
+
+#### :house: Internal
+* [#179](https://github.com/ember-cli/ember-cli-version-checker/pull/179) Add automated release setup. ([@rwjblue](https://github.com/rwjblue))
+
+#### Committers: 2
+- Robert Jackson ([@rwjblue](https://github.com/rwjblue))
+- Thomas Wang ([@xg-wang](https://github.com/xg-wang))
+
+
 ##  v5.0.1 (2020-02-14)
 
 * correct URLs to point to the correct GH organization
