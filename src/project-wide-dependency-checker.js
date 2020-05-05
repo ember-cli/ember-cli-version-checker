@@ -21,7 +21,7 @@ module.exports = class ProjectWideDependencyChecker {
 
     if (project._addonsInitialized !== true) {
       throw new TypeError(
-        `[ember-cli-version-checker]'s forProject must be provided an project instance whos addons have been initialized. This is typically outside the addon's init`
+        `[ember-cli-version-checker]'s forProject must be provided an project instance who's addons have been initialized. This is typically outside the addon's init`
       );
     }
 
