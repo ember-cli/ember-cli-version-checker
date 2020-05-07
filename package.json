@@ -22,8 +22,8 @@
   ],
   "scripts": {
     "changelog": "lerna-changelog",
-    "test": "mocha tests",
-    "test:debug": "mocha debug tests"
+    "test": "mocha tests/*-tests.js",
+    "test:debug": "mocha debug tests/*-tests.js"
   },
   "prettier": {
     "singleQuote": true,
@@ -35,9 +35,10 @@
     "silent-error": "^1.1.1"
   },
   "devDependencies": {
-    "broccoli-test-helper": "^2.0.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
+    "fixturify": "^2.1.0",
+    "fixturify-project": "^2.1.0",
     "lerna-changelog": "^1.0.1",
     "mocha": "^7.1.2",
     "mocha-eslint": "^6.0.0",
