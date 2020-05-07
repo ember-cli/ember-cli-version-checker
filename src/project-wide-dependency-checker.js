@@ -3,8 +3,9 @@ const {
   hasSingleImplementation,
   allAddons,
 } = require('./utils/single-implementation');
+const semver = require('semver');
 const SilentError = require('silent-error');
-
+const { EOL } = require('os');
 /* global Set */
 
 module.exports = class ProjectWideDependencyChecker {
@@ -48,6 +49,22 @@ module.exports = class ProjectWideDependencyChecker {
     return addons;
   }
 
+  filterAddonsByNames(names) {
+    const result = Object.create(null);
+    for (let name of names) {
+      result[name] = [];
+    }
+
+    for (let addon of this.allAddons()) {
+      const addonResult = result[addon.name];
+      if (addonResult !== undefined) {
+        addonResult.push(addon);
+      }
+    }
+
+    return result;
+  }
+
   assertSingleImplementation(name, customMessage) {
     const uniqueImplementations = new Set();
 
@@ -77,4 +94,75 @@ module.exports = class ProjectWideDependencyChecker {
 
     throw new SilentError(message);
   }
+
+  check(constraints) {
+    const names = Object.keys(constraints);
+    const addons = this.filterAddonsByNames(names);
+    const node_modules = Object.create(null);
+
+    for (let name in addons) {
+      const found = addons[name];
+      const versions = found.map(addon => addon.pkg.version);
+
+      const constraint = constraints[name];
+      const missing = versions.length === 0;
+      const isSatisfied =
+        !missing &&
+        versions.every(version => semver.satisfies(version, constraint));
+
+      let message;
+      if (isSatisfied) {
+        message = '';
+      } else if (missing) {
+        message = `'${name}' was not found, expected version: [${constraint}]`;
+      } else {
+        message = `'${name}' expected version: [${constraint}] but got version${
+          versions.length > 1 ? 's' : ''
+        }: [${versions.join(', ')}]`;
+      }
+
+      node_modules[name] = {
+        versions,
+        isSatisfied,
+        message,
+      };
+    }
+
+    return new Check(node_modules);
+  }
 };
+
+class Check {
+  constructor(node_modules) {
+    this.node_modules = node_modules;
+    Object.freeze(this);
+  }
+
+  get isSatisfied() {
+    return Object.values(this.node_modules).every(
+      node_module => node_module.isSatisfied
+    );
+  }
+
+  get message() {
+    let result = '';
+
+    for (const name in this.node_modules) {
+      const { message } = this.node_modules[name];
+      if (message !== '') {
+        result += ` - ${message}${EOL}`;
+      }
+    }
+
+    return result;
+  }
+
+  assert(description = 'Checker Assertion Failed') {
+    if (this.isSatisfied) {
+      return;
+    }
+    throw new Error(
+      `[Ember-cli-version-checker] ${description}\n${this.message}`
+    );
+  }
+}

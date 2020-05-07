@@ -6,6 +6,7 @@ module.exports = class Project extends require('./has-a-fixture') {
     super(name, version, new FixturifyProject(name, version));
     this.version = version;
     this._addonsInitialized = true;
+    Object.freeze(this);
   }
   isEmberCLIProject() {}
 };
