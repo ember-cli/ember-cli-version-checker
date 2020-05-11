@@ -236,7 +236,7 @@ module.exports = {
 
 ### allAddons
 
-An iterator which gives acccess to all addon instances
+An iterator which gives access to all addon instances
 
 ```js
 const VersionChecker = require('ember-cli-version-checker');
@@ -249,7 +249,67 @@ module.exports = {
     let checker = VersionChecker.forProject(this.project);
 
     for (let { name, root } = checker.allAddons()) {
-      // access to the add-on, in this case root + name
+      // access to the addon, in this case name and root
+    }
+  }
+};
+```
+
+### check
+
+A utility to verify that addons are installed at appropriate versions.  `npm`
+and `yarn` resolve conflicting transitive dependency requirements by installing
+multiple versions.  They do not include a mechanism for packages to declare
+that a dependency must be unique.  This is, however, a practical constraint
+when building Ember applications (for example, we would not want to build an
+application that shipped two versions of Ember Data). [Related discussion on npm](https://github.com/npm/rfcs/pull/23)
+
+Every addon in the ember ecosystem implicitly depends on `ember-source`, and
+most likely a specific version range. If that dependency is specified as a
+`package.json` dependency, a mismatch between application and addon would
+result in duplicating `ember-source`.  Instead of failing the build, we would
+build an application with an unknown version of `ember-source`, subverting the
+point of specifying dependency version ranges in the first place!  The `check`
+API provides a mechanism to avoid this and fail fast in the build step, instead
+of building an invalid application with harder to debug runtime errors.
+
+For example, as of today `ember-data` supports `ember-source` `>= 3.4.8`, if it
+where to use this addon, it could specify this constraint and provide good
+error messages to users.
+
+```javascript
+const VersionChecker = require('ember-cli-version-checker');
+
+module.exports = {
+  name: 'awesome-addon',
+  included() {
+    this._super.included.apply(this, arguments);
+
+    const checker = VersionChecker.forProject(this.project);
+    const check = checker.check({
+      'ember-source': '>= 3.4.8'
+    });
+
+    // if it would like to simply assert
+    check.assert('[awesome-addon] dependency check failed');
+    // will throw an error message similar to the following if the check was not satisfied:
+
+    //   [awesome-addon] dependency check failed:
+    //     - 'ember-source' expected version [>= 3.4.8] but got version: [2.0.0]
+
+    // if the requirements are more advanced, we can inspect the resulting check.
+
+    if (!check.isSatisfied) {
+      const altCheck = checker.check({
+        'magical-polyfil': '>= 1.0.0',
+        'ember-source': '>= 3.0.0'
+      })
+
+      check.assert('[awesome-addon] dependency check failed:');
+      // will throw error message similar to the following if the check was not satisfied:
+      //   [awesome-addon] dependency check failed:
+      //     - 'magical-polyfil' expected version [>= 1.0.0] but got version: [0.0.1]
+      //     - 'ember-source' expected version [>= 3.0.0] but got version: [2.0.-]
     }
   }
 };
