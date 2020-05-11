@@ -1,3 +1,8 @@
+
+## v5.1.0 (2020-05-11)
+
+* [#206](https://github.com/ember-cli/ember-cli-version-checker/pull/206) Add ProjectWideDependencyChecker `check` API([@stefanpenner](https://github.com/stefanpenner))
+
 ## v5.0.2 (2020-03-23)
 
 #### :bug: Bug Fix
