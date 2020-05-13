@@ -54,6 +54,9 @@ describe('ember-cli-version-checker', function() {
         project.writeSync();
         checker = VersionChecker.forProject(project);
 
+        project.addAddon('alpha', '1.1.0-alpha.1');
+        project.addAddon('beta', '1.1.0-beta.1');
+        project.addAddon('trailing-alpha', '1.0.0-alpha.1');
         project.addAddon('top', '1.0.0');
         project.addAddon('bar', '3.0.0');
         project.addAddon('fake-addon', '3.0.0', addon => {
@@ -137,7 +140,18 @@ describe('ember-cli-version-checker', function() {
       it('has a functioning allAddons iterator', function() {
         assert.deepEqual(
           [...checker.allAddons()].map(x => x.name),
-          ['ember', 'top', 'bar', 'fake-addon', 'foo', 'bar', 'foo']
+          [
+            'ember',
+            'alpha',
+            'beta',
+            'trailing-alpha',
+            'top',
+            'bar',
+            'fake-addon',
+            'foo',
+            'bar',
+            'foo',
+          ]
         );
       });
 
@@ -147,6 +161,40 @@ describe('ember-cli-version-checker', function() {
           assert.deepEqual(checked.node_modules, {});
           assert.equal(checked.isSatisfied, true);
           assert.equal(checked.message, '');
+        });
+
+        it('is satisfied by pre-releases', function() {
+          const checked = checker.check({
+            alpha: '>= 1.0.0',
+            beta: '>= 1.0.0',
+          });
+          assert.deepEqual(checked.node_modules, {
+            alpha: {
+              versions: ['1.1.0-alpha.1'],
+              isSatisfied: true,
+              message: ``,
+            },
+            beta: {
+              versions: ['1.1.0-beta.1'],
+              isSatisfied: true,
+              message: ``,
+            },
+          });
+          assert.equal(checked.isSatisfied, true);
+        });
+
+        it('is not satisfied by pre-releases in the same minor', function() {
+          const checked = checker.check({
+            'trailing-alpha': '>= 1.0.0',
+          });
+          assert.deepEqual(checked.node_modules, {
+            'trailing-alpha': {
+              versions: ['1.0.0-alpha.1'],
+              isSatisfied: false,
+              message: `'trailing-alpha' expected version: [>= 1.0.0] but got version: [1.0.0-alpha.1]`,
+            },
+          });
+          assert.equal(checked.isSatisfied, false);
         });
 
         it('is not satisfied if checked deps are missing', function() {
