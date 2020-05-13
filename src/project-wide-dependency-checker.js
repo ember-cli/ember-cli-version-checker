@@ -108,7 +108,7 @@ module.exports = class ProjectWideDependencyChecker {
       const missing = versions.length === 0;
       const isSatisfied =
         !missing &&
-        versions.every(version => semver.satisfies(version, constraint));
+        versions.every(version => semver.satisfies(version, constraint, { includePrerelease: true }));
 
       let message;
       if (isSatisfied) {
