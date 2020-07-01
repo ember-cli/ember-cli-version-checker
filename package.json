@@ -43,7 +43,7 @@
     "mocha": "^7.2.0",
     "mocha-eslint": "^6.0.0",
     "prettier": "^1.19.1",
-    "release-it": "^13.6.1",
+    "release-it": "^13.6.4",
     "release-it-lerna-changelog": "^2.3.0"
   },
   "engines": {
