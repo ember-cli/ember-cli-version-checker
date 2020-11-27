@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/ember-cli-version-checker.svg)](https://badge.fury.io/js/ember-cli-version-checker)
 ![](https://github.com/stefanpenner/do-you-even-test/workflows/ci/badge.svg)
 
-Makes it easier to determine if a compatible version of a given NPM or Bower package is present.
+Makes it easier to determine if a compatible version of a given NPM package is present.
 
 ## Usage
 
@@ -19,11 +19,11 @@ module.exports = {
   name: 'awesome-addon',
   treeForAddonTemplates(tree) {
     let checker = new VersionChecker(this.project);
-    let dep = checker.for('ember', 'bower');
+    let dep = checker.for('ember-source');
 
     let baseTemplatesPath = path.join(this.root, 'addon/templates');
 
-    if (dep.satisfies('>= 1.13.0')) {
+    if (dep.satisfies('>= 3.4.0')) {
       return this.treeGenerator(path.join(baseTemplatesPath, 'current'));
     } else {
       return this.treeGenerator(path.join(baseTemplatesPath, 'legacy'));
@@ -174,7 +174,7 @@ version range or the app uses [yarn
   resolutions](https://yarnpkg.com/lang/en/docs/selective-version-resolutions/).
 
 This is useful if the app wants to make sure there's no unexpected assets from
-the addon on being included but still alow the addon being included in the
+the addon being included but still allow the addon to be included in the
 hierarchy's build process.
 
 ```js
