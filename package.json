@@ -35,7 +35,7 @@
     "silent-error": "^1.1.1"
   },
   "devDependencies": {
-    "eslint-config-prettier": "^6.15.0",
+    "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.0",
     "fixturify": "^2.1.0",
     "fixturify-project": "^2.1.0",
