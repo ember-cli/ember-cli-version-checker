@@ -1,18 +1,20 @@
 'use strict';
-const fs = require('fs');
 const semver = require('semver');
 const getProject = require('./get-project');
-const resolvePackage = require('resolve-package-path');
+const resolvePackagePath = require('resolve-package-path');
 
+/*
+ * Retrieve the version field from the package.json file contents.
+ * NOTE: the callers have already checked that the filePath is not null/undefined.
+ */
 function getVersionFromJSONFile(filePath) {
-  if (fs.existsSync(filePath)) {
-    let content = fs.readFileSync(filePath);
-
-    try {
-      return JSON.parse(content).version;
-    } catch (exception) {
-      return null;
-    }
+  try {
+    // Use the require cache to avoid file I/O after first call on a given path.
+    let pkg = require(filePath);
+    return pkg.version || null;
+  } catch (err) {
+    // file doesn't exist or is not a file or is not parseable.
+    return null;
   }
 }
 
@@ -23,12 +25,18 @@ class DependencyVersionChecker {
   constructor(parent, name) {
     this._parent = parent;
     this.name = name;
-    let addon = this._parent._addon;
-    let basedir = addon.root || getProject(addon).root;
-    this._jsonPath = resolvePackage(this.name, basedir);
   }
 
   get version() {
+    if (this._jsonPath === undefined) {
+      // get the path to the package.json file. resolvePackagePath will
+      // return the path or null, never undefined, so we can use that
+      // to only resolvePackagePath once.
+      let addon = this._parent._addon;
+      let basedir = addon.root || getProject(addon).root;
+      this._jsonPath = resolvePackagePath(this.name, basedir);
+    }
+
     if (this._version === undefined && this._jsonPath) {
       this._version = getVersionFromJSONFile(this._jsonPath);
     }
