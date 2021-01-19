@@ -1,5 +1,15 @@
 # Changelog
 
+## v5.1.2 (2021-01-19)
+
+#### :rocket: Enhancement
+* [#242](https://github.com/ember-cli/ember-cli-version-checker/pull/242) Remove extraneous file I/O when checking the same package version ([@davecombs](https://github.com/davecombs))
+
+#### Committers: 2
+- Dave Combs ([@davecombs](https://github.com/davecombs))
+- [@dependabot-preview[bot]](https://github.com/apps/dependabot-preview)
+
+
 ## v5.1.1 (2020-05-13)
 
 #### :bug: Bug Fix
