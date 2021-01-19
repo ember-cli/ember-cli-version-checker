@@ -1,3 +1,11 @@
+## v5.1.1 (2020-05-13)
+
+#### :bug: Bug Fix
+* [#207](https://github.com/ember-cli/ember-cli-version-checker/pull/207) fix: Semver constraint matching should allow prereleases ([@runspired](https://github.com/runspired))
+
+#### Committers: 1
+- Chris Thoburn ([@runspired](https://github.com/runspired))
+
 ## v5.1.0 (2020-05-13)
 
 #### :bug: Bug Fix
