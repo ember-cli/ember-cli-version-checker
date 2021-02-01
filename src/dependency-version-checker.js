@@ -11,7 +11,11 @@ function getVersionFromJSONFile(filePath) {
   try {
     // Use the require cache to avoid file I/O after first call on a given path.
     let pkg = require(filePath);
-    return pkg.version || null;
+
+    // Note: the callers rely on the fact that pkg.version may be undefined, so
+    // we must not be "smart" about setting the value to null here to stop any
+    // repeated calls for the same path.
+    return pkg.version;
   } catch (err) {
     // file doesn't exist or is not a file or is not parseable.
     return null;
