@@ -1,16 +1,18 @@
 'use strict';
-const fs = require('fs');
 const semver = require('semver');
 
+/*
+ * Retrieve the version field from the package.json file contents.
+ * NOTE: the callers have already checked that the filePath is not null/undefined.
+ */
 function getVersionFromJSONFile(filePath) {
-  if (fs.existsSync(filePath)) {
-    let content = fs.readFileSync(filePath);
-
-    try {
-      return JSON.parse(content).version;
-    } catch (exception) {
-      return null;
-    }
+  try {
+    // Use the require cache to avoid file I/O after first call on a given path.
+    let pkg = require(filePath);
+    return pkg.version;
+  } catch (err) {
+    // file doesn't exist or is not a file or is not parseable.
+    return null;
   }
 }
 
