@@ -295,6 +295,47 @@ describe('ember-cli-version-checker', function() {
           thing.assertAbove('999.0.0', message);
         }, new RegExp(message));
       });
+
+      it('throws an error with a default message if versions match', function() {
+        let thing = checker.for('ember', 'npm');
+        let message =
+          'The addon `.*` requires the npm package `ember` to be above 2.0.0, but you have 2.0.0.';
+
+        assert.throws(() => {
+          thing.assertAbove('2.0.0');
+        }, new RegExp(message));
+      });
+    });
+
+    describe('assertAtOrAbove', function() {
+      it('throws an error with a default message if a matching version was not found', function() {
+        let thing = checker.for('ember', 'npm');
+        let message =
+          'The addon `.*` requires the npm package `ember` to be at or above 999.0.0, but you have 2.0.0.';
+
+        assert.throws(() => {
+          thing.assertAtOrAbove('999.0.0');
+        }, new RegExp(message));
+      });
+
+      it('throws an error with the given message if a matching version was not found', function() {
+        let message = 'Must use at least Ember CLI 0.1.2 to use xyz feature';
+        let thing = checker.for('ember', 'npm');
+
+        assert.throws(() => {
+          thing.assertAtOrAbove('999.0.0', message);
+        }, new RegExp(message));
+      });
+
+      it('does not throw an error with a default message if versions match', function() {
+        let thing = checker.for('ember', 'npm');
+        let message =
+          'The addon `.*` requires the npm package `ember` to be at or above 2.0.0, but you have 2.0.0.';
+
+        assert.doesNotThrow(() => {
+          thing.assertAtOrAbove('2.0.0');
+        }, new RegExp(message));
+      });
     });
   });
 });
