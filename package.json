@@ -37,7 +37,7 @@
   "devDependencies": {
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "fixturify": "^2.1.0",
+    "fixturify": "^2.1.1",
     "fixturify-project": "^2.1.1",
     "lerna-changelog": "^1.0.1",
     "mocha": "^8.3.2",
