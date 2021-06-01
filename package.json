@@ -40,7 +40,7 @@
     "fixturify": "^2.1.1",
     "fixturify-project": "^2.1.1",
     "lerna-changelog": "^1.0.1",
-    "mocha": "^8.3.2",
+    "mocha": "^8.4.0",
     "mocha-eslint": "^6.0.0",
     "prettier": "^1.19.1",
     "release-it": "^14.7.0",
