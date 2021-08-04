@@ -60,7 +60,9 @@ module.exports = {
 
 ### assertAbove
 
-Throws an error with the given message if a minimum version isn't met.
+Throws an error if the package version is not greater than the given version.
+You can also provide a specific message as the third argument if you'd like to
+customize the output.
 
 ```javascript
 let VersionChecker = require('ember-cli-version-checker');
@@ -73,11 +75,16 @@ module.exports = {
     let checker = new VersionChecker(this.project);
 
     checker.for('ember-cli').assertAbove('2.0.0');
+    checker.for('ember-cli').assertAbove('2.0.0', 'To use awesome-addon you must have ember-cli 2.0.1');
   }
 };
 ```
 
-You can also provide a specific message as the third argument to `assertAbove` if you'd like to customize the output.
+### assertAtOrAbove
+
+Throws an error if the package version is not greater than or equal to the
+given (minimum) version. You can also provide a specific message as the third
+argument if you'd like to customize the output.
 
 ```javascript
 let VersionChecker = require('ember-cli-version-checker');
@@ -89,14 +96,15 @@ module.exports = {
 
     let checker = new VersionChecker(this.project);
 
-    checker.for('ember-cli').assertAbove('2.0.0', 'To use awesome-addon you must have ember-cli 2.0.0');
+    checker.for('ember-cli').assertAtOrAbove('2.0.0');
+    checker.for('ember-cli').assertAtOrAbove('2.0.0', 'To use awesome-addon you must have ember-cli 2.0.0');
   }
 };
 ```
 
 ### isAbove
 
-Returns `true` if the packages version is above the specified comparison range.
+Returns `true` if the package version is greater than the specified comparison version.
 
 ```javascript
 let VersionChecker = require('ember-cli-version-checker');
@@ -110,6 +118,30 @@ module.exports = {
     let dep = checker.for('ember-cli');
 
     if (dep.isAbove('2.0.0')) {
+      /* deal with 2.0.1 stuff */
+    } else {
+      /* provide backwards compat */
+    };
+  }
+};
+```
+
+### isAtOrAbove
+
+Returns `true` if the package version is greater than or equal to the specified comparison version.
+
+```javascript
+let VersionChecker = require('ember-cli-version-checker');
+
+module.exports = {
+  name: 'awesome-addon',
+  init() {
+    this._super.init.apply(this, arguments);
+
+    let checker = new VersionChecker(this.project);
+    let dep = checker.for('ember-cli');
+
+    if (dep.isAtOrAbove('2.0.0')) {
       /* deal with 2.0.0 stuff */
     } else {
       /* provide backwards compat */

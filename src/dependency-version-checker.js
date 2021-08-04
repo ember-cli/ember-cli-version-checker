@@ -63,12 +63,30 @@ class DependencyVersionChecker {
     return semver.gt(this.version, compareVersion);
   }
 
+  isAtOrAbove(compareVersion) {
+    if (!this.version) {
+      return false;
+    }
+    return semver.gte(this.version, compareVersion);
+  }
+
   assertAbove(compareVersion, _message) {
     let message = _message;
     if (!this.isAbove(compareVersion)) {
       if (!message) {
         const parentAddon = this._parent._addon;
         message = `The addon \`${parentAddon.name}\` @ \`${parentAddon.root}\` requires the npm package \`${this.name}\` to be above ${compareVersion}, but you have ${this.version}.`;
+      }
+      throw new Error(message);
+    }
+  }
+
+  assertAtOrAbove(compareVersion, _message) {
+    let message = _message;
+    if (!this.isAtOrAbove(compareVersion)) {
+      if (!message) {
+        const parentAddon = this._parent._addon;
+        message = `The addon \`${parentAddon.name}\` @ \`${parentAddon.root}\` requires the npm package \`${this.name}\` to be at or above ${compareVersion}, but you have ${this.version}.`;
       }
       throw new Error(message);
     }
