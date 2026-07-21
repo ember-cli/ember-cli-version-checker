@@ -3,13 +3,13 @@ name: CI
 on:
   push:
     branches:
+      - main
       - master
-      - 'v*' # older version branches
-    tags:
-      - '*'
   pull_request: {}
-  schedule:
-  - cron:  '0 6 * * 0' # weekly, on sundays
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -18,15 +18,21 @@ jobs:
 
     strategy:
       matrix:
-        node: ['10', '12']
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        node: 
+          - 22
+          - 24
+          - 26
+        os: 
+          - ubuntu-latest
+          - macOS-latest
+          - windows-latest]
 
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
+    - uses: actions/checkout@v7
+    - uses: pnpm/action-setup@v6
+    - uses: actions/setup-node@v7
       with:
         node-version: ${{ matrix.node }}
-    - name: install dependencies
-      run: yarn
-    - name: test
-      run: yarn test
+        cache: pnpm
+    - run: pnpm install
+    - run: pnpm test
