@@ -41,8 +41,8 @@ module.exports = class HasAFixture {
     return this._fixture.baseDir;
   }
 
-  writeSync(...args) {
-    return this._fixture.writeSync(...args);
+  write(...args) {
+    return this._fixture.write(...args);
   }
 
   readSync(...args) {

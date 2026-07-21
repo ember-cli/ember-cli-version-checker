@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const VersionChecker = require('..');
+const FakeProject = require('./utils/project');
 
 describe('ember-cli-version-checker', function () {
   describe('VersionChecker#forEmber', function () {
@@ -17,37 +18,44 @@ describe('ember-cli-version-checker', function () {
   describe('VersionChecker#for', function () {
     let addon, checker, project;
 
-    beforeEach(function () {
-      const FakeProject = require('./utils/project');
+    beforeEach(async function () {
       project = new FakeProject('rsvp', '3.1.4');
       project.addAddon('ember', '2.0.0');
 
       addon = project.addAddon('rsvp');
-      project.writeSync();
+      await project.write();
       checker = new VersionChecker(addon);
     });
 
     describe('nested packages', function () {
-      it('finds nested packages from the current addons root', function () {
+      it('finds nested packages from the current addons root', async function () {
         let fakeAddon;
+        project = new FakeProject('rsvp', '3.1.4');
+        project.addAddon('ember', '2.0.0');
+
+        addon = project.addAddon('rsvp');
         project.addAddon('bar', '3.0.0', (addon) => {
           fakeAddon = addon.addAddon('fake-addon', '3.3.3', (addon) => {
             addon.addAddon('bar', '2.0.0');
           });
         });
 
-        project.writeSync();
+        await project.write();
 
         assert.equal(new VersionChecker(fakeAddon).for('bar').version, '2.0.0');
         assert.equal(new VersionChecker(addon).for('bar').version, '3.0.0');
       });
 
-      it('falls back to the project root for instances of `EmberAddon` that do not have a `root` property', function () {
+      it('falls back to the project root for instances of `EmberAddon` that do not have a `root` property', async function () {
+        project = new FakeProject('rsvp', '3.1.4');
+        project.addAddon('ember', '2.0.0');
+
+        addon = project.addAddon('rsvp');
         project.addAddon('bar', '3.0.0', (addon) => {
           addon.addAddon('fake-addon', '4.0.0');
         });
 
-        project.writeSync();
+        await project.write();
         // silly situation, where dummy app addons may not have a root.
         delete addon.root;
 

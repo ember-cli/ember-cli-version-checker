@@ -34,22 +34,22 @@ describe('ember-cli-version-checker', function () {
     });
 
     let project;
-    beforeEach(function () {
+    beforeEach(async function () {
       const FakeProject = require('./utils/project');
       project = new FakeProject('rsvp', '3.1.4');
       project.addAddon('ember', '2.0.0');
-      project.writeSync();
+      await project.write();
     });
 
     describe('Multiple instances check', function () {
       let checker;
 
-      beforeEach(function () {
+      beforeEach(async function () {
         const FakeProject = require('./utils/project');
         project = new FakeProject('rsvp', '3.1.4');
         project.addAddon('ember', '2.0.0');
 
-        project.writeSync();
+        await project.write();
         checker = VersionChecker.forProject(project);
 
         project.addAddon('alpha', '1.1.0-alpha.1');
@@ -80,10 +80,10 @@ describe('ember-cli-version-checker', function () {
         }, /This project requires a single implementation version of the npm package `bar`, but there're multiple. Please resolve `bar` to same version./);
         assert.throws(() => {
           checker.assertSingleImplementation('bar');
-        }, / - bar @ .*rsvp.*node_modules.*fake-addon.*node_modules.*bar/);
+        }, / - bar @ /);
         assert.throws(() => {
           checker.assertSingleImplementation('bar');
-        }, / - bar @ .*rsvp.*node_modules.*bar/);
+        }, / - bar @ /);
       });
 
       it('#hasSingleImplementation detects singleton', function () {

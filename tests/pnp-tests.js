@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const execSync = require('child_process').execSync;
-const Project = require('fixturify-project');
+const { Project } = require('fixturify-project');
 const skipWindows = require('./utils/skip-window');
 const buildVersionCheckerBin = require('./utils/version-checker-bin');
 
@@ -30,7 +30,7 @@ class PnPProject extends Project {
 skipWindows('with yarn pnp', function () {
   this.timeout(600000);
   let project;
-  beforeEach(function () {
+  beforeEach(async function () {
     project = new PnPProject('test-project');
 
     project.addDependency('ember-source-channel-url', '1.1.0');
@@ -40,7 +40,7 @@ skipWindows('with yarn pnp', function () {
       isEmberCLIProject() {},
     }`);
 
-    project.writeSync();
+    await project.write();
 
     execSync('yarn', {
       cwd: project.baseDir,
