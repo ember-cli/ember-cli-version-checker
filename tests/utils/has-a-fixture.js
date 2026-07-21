@@ -59,7 +59,7 @@ module.exports = class HasAFixture {
 
   addAddon(name, version, cb) {
     let addon;
-    this._fixture.addDependency(name, version, fixture => {
+    this._fixture.addDependency(name, version, (fixture) => {
       addon = new (require('./addon'))(name, version, this, fixture);
 
       if (typeof cb === 'function') {
@@ -74,7 +74,7 @@ module.exports = class HasAFixture {
 
   addDevAddon(name, version, cb) {
     let addon;
-    this._fixture.addDevDependency(name, version, fixture => {
+    this._fixture.addDevDependency(name, version, (fixture) => {
       addon = new (require('./addon'))(name, version, this, fixture);
       if (typeof cb === 'function') {
         cb(addon);

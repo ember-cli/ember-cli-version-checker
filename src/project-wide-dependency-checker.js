@@ -6,7 +6,6 @@ const {
 const semver = require('semver');
 const SilentError = require('silent-error');
 const { EOL } = require('os');
-/* global Set */
 
 module.exports = class ProjectWideDependencyChecker {
   constructor(project) {
@@ -102,13 +101,13 @@ module.exports = class ProjectWideDependencyChecker {
 
     for (let name in addons) {
       const found = addons[name];
-      const versions = found.map(addon => addon.pkg.version);
+      const versions = found.map((addon) => addon.pkg.version);
 
       const constraint = constraints[name];
       const missing = versions.length === 0;
       const isSatisfied =
         !missing &&
-        versions.every(version =>
+        versions.every((version) =>
           semver.satisfies(version, constraint, { includePrerelease: true })
         );
 
@@ -142,7 +141,7 @@ class Check {
 
   get isSatisfied() {
     return Object.values(this.node_modules).every(
-      node_module => node_module.isSatisfied
+      (node_module) => node_module.isSatisfied
     );
   }
 

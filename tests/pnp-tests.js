@@ -27,10 +27,10 @@ class PnPProject extends Project {
   }
 }
 
-skipWindows('with yarn pnp', function() {
+skipWindows('with yarn pnp', function () {
   this.timeout(600000);
   let project;
-  beforeEach(function() {
+  beforeEach(function () {
     project = new PnPProject('test-project');
 
     project.addDependency('ember-source-channel-url', '1.1.0');
@@ -47,11 +47,11 @@ skipWindows('with yarn pnp', function() {
     });
   });
 
-  afterEach(function() {
+  afterEach(function () {
     project.dispose();
   });
 
-  it('finds packages that are present', function() {
+  it('finds packages that are present', function () {
     const result = execSync(
       'node -r ./.pnp.js ./index.js ember-source-channel-url',
       {
@@ -62,7 +62,7 @@ skipWindows('with yarn pnp', function() {
     assert.strictEqual(result.toString(), 'ember-source-channel-url: 1.1.0\n');
   });
 
-  it('does not find packages that are missing', function() {
+  it('does not find packages that are missing', function () {
     const result = execSync('node -r ./.pnp.js ./index.js blah-blah-blah', {
       cwd: project.baseDir,
     });

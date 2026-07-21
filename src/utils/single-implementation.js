@@ -1,7 +1,5 @@
 'use strict';
 
-/* global WeakMap, Map */
-
 const UNIQUE_ADDON_MAP = new WeakMap();
 
 /**

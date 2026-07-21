@@ -16,7 +16,7 @@ function getVersionFromJSONFile(filePath) {
     // we must not be "smart" about setting the value to null here to stop any
     // repeated calls for the same path.
     return pkg.version;
-  } catch (err) {
+  } catch {
     // file doesn't exist or is not a file or is not parseable.
     return null;
   }
@@ -76,7 +76,7 @@ class DependencyVersionChecker {
 }
 
 for (let method of ['gt', 'lt', 'gte', 'lte', 'eq', 'neq', 'satisfies']) {
-  DependencyVersionChecker.prototype[method] = function(range) {
+  DependencyVersionChecker.prototype[method] = function (range) {
     if (!this.version) {
       return method === 'neq';
     }

@@ -6,11 +6,11 @@ const buildVersionCheckerBin = require('./utils/version-checker-bin');
 const Project = require('fixturify-project');
 const execSync = require('child_process').execSync;
 
-skipWindows('with yarn workspace', function() {
+skipWindows('with yarn workspace', function () {
   this.timeout(600000);
 
   let project;
-  beforeEach(function() {
+  beforeEach(function () {
     project = new Project('test-project');
     project.workspaces = ['app', 'addon'];
 
@@ -47,12 +47,12 @@ skipWindows('with yarn workspace', function() {
     });
   });
 
-  afterEach(function() {
+  afterEach(function () {
     project.dispose();
   });
 
   // https://github.com/ember-cli/ember-cli-version-checker/issues/70
-  it('uses the sub-package local version over the hoisted version for addon dummy apps', function() {
+  it('uses the sub-package local version over the hoisted version for addon dummy apps', function () {
     const result = execSync('node ./dummy.js bar', {
       cwd: project.baseDir + '/addon/',
     });
@@ -60,7 +60,7 @@ skipWindows('with yarn workspace', function() {
     assert.strictEqual(result.toString(), 'bar: 3.0.0\n');
   });
 
-  it('uses the hoisted version, if there is no package local version', function() {
+  it('uses the hoisted version, if there is no package local version', function () {
     const result = execSync('node ./index.js bar', {
       cwd: project.baseDir + '/app/',
     });
@@ -68,7 +68,7 @@ skipWindows('with yarn workspace', function() {
     assert.strictEqual(result.toString(), 'bar: 2.0.0\n');
   });
 
-  it('does not find packages that are missing', function() {
+  it('does not find packages that are missing', function () {
     const result = execSync('node ./index.js blah-blah-blah', {
       cwd: project.baseDir + '/app/',
     });

@@ -23,6 +23,12 @@
   "scripts": {
     "changelog": "lerna-changelog",
     "test": "mocha tests/*-tests.js",
+    "format": "prettier . --cache --write",
+    "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\" --prefixColors auto",
+    "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\" --prefixColors auto && npm run format",
+    "lint:format": "prettier . --cache --check",
+    "lint:js": "eslint . --cache",
+    "lint:js:fix": "eslint . --fix",
     "test:debug": "mocha debug tests/*-tests.js"
   },
   "prettier": {
@@ -35,19 +41,18 @@
     "silent-error": "^1.1.1"
   },
   "devDependencies": {
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.4.0",
+    "@eslint/js": "^10.0.1",
+    "concurrently": "^10.0.3",
+    "eslint": "^10.7.0",
+    "eslint-config-prettier": "^10.1.8",
     "fixturify": "^2.1.1",
     "fixturify-project": "^2.1.1",
-    "lerna-changelog": "^1.0.1",
-    "mocha": "^8.4.0",
-    "mocha-eslint": "^6.0.0",
-    "prettier": "^1.19.1",
-    "release-it": "^14.10.1",
-    "release-it-lerna-changelog": "^3.1.0"
+    "globals": "^17.7.0",
+    "mocha": "^11.7.6",
+    "prettier": "^3.9.5"
   },
   "engines": {
-    "node": "10.* || >= 12.*"
+    "node": "22.* || 24.* || >= 26.*"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -69,5 +74,6 @@
   },
   "volta": {
     "node": "10.19.0"
-  }
+  },
+  "packageManager": "pnpm@11.15.1+sha512.81350b07e53c9538a02f1f2303b4290fa2d7be04e56e2a970c4cc4b417dc761de196edabd49d55c7dc9580db81007c44143e4e3d7e462b3000d23c255122d065"
 }
