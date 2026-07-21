@@ -22,13 +22,13 @@
   ],
   "scripts": {
     "changelog": "lerna-changelog",
-    "test": "mocha tests/*-tests.js",
     "format": "prettier . --cache --write",
     "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\" --prefixColors auto",
     "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\" --prefixColors auto && npm run format",
     "lint:format": "prettier . --cache --check",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
+    "test": "mocha tests/*-tests.js",
     "test:debug": "mocha debug tests/*-tests.js"
   },
   "prettier": {
@@ -49,31 +49,17 @@
     "fixturify-project": "^2.1.1",
     "globals": "^17.7.0",
     "mocha": "^11.7.6",
-    "prettier": "^3.9.5"
+    "prettier": "^3.9.5",
+    "release-plan": "^0.18.0"
   },
+  "packageManager": "pnpm@11.15.1+sha512.81350b07e53c9538a02f1f2303b4290fa2d7be04e56e2a970c4cc4b417dc761de196edabd49d55c7dc9580db81007c44143e4e3d7e462b3000d23c255122d065",
   "engines": {
     "node": "22.* || 24.* || >= 26.*"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
-  },
-  "release-it": {
-    "plugins": {
-      "release-it-lerna-changelog": {
-        "infile": "CHANGELOG.md",
-        "launchEditor": true
-      }
-    },
-    "git": {
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": true,
-      "tokenRef": "GITHUB_AUTH"
-    }
   },
   "volta": {
     "node": "10.19.0"
   },
-  "packageManager": "pnpm@11.15.1+sha512.81350b07e53c9538a02f1f2303b4290fa2d7be04e56e2a970c4cc4b417dc761de196edabd49d55c7dc9580db81007c44143e4e3d7e462b3000d23c255122d065"
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  }
 }
