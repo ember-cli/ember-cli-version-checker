@@ -6,7 +6,6 @@ const {
 const semver = require('semver');
 const SilentError = require('silent-error');
 const { EOL } = require('os');
-/* global Set */
 
 module.exports = class ProjectWideDependencyChecker {
   constructor(project) {

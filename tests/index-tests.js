@@ -1,7 +1,5 @@
 'use strict';
 
-/* eslint-env mocha, node */
-
 const assert = require('assert');
 const VersionChecker = require('..');
 

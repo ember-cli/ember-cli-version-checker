@@ -1,8 +1,6 @@
 'use strict';
 const { EOL } = require('os');
 
-/* eslint-env mocha, node */
-
 const assert = require('assert');
 const VersionChecker = require('..');
 
