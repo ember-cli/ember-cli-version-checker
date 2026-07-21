@@ -1,5 +1,33 @@
 # Changelog
 
+## Release (2026-07-21)
+
+* ember-cli-version-checker 6.0.0 (major)
+
+#### :boom: Breaking Change
+* `ember-cli-version-checker`
+  * [#292](https://github.com/ember-cli/ember-cli-version-checker/pull/292) convert to ESM only and set type: module in package.json ([@mansona](https://github.com/mansona))
+  * [#291](https://github.com/ember-cli/ember-cli-version-checker/pull/291) drop yarn pnp tests - i.e. drop support for yarn pnp ([@mansona](https://github.com/mansona))
+  * [#288](https://github.com/ember-cli/ember-cli-version-checker/pull/288) drop support for Node < 22 and swap to pnpm ([@mansona](https://github.com/mansona))
+
+#### :bug: Bug Fix
+* `ember-cli-version-checker`
+  * [#248](https://github.com/ember-cli/ember-cli-version-checker/pull/248) fixed return value of getVersionFromJSONFile ([@davecombs](https://github.com/davecombs))
+
+#### :memo: Documentation
+* `ember-cli-version-checker`
+  * [#232](https://github.com/ember-cli/ember-cli-version-checker/pull/232) Remove bower references ([@bantic](https://github.com/bantic))
+
+#### :house: Internal
+* `ember-cli-version-checker`
+  * [#290](https://github.com/ember-cli/ember-cli-version-checker/pull/290) update fixturify project ([@mansona](https://github.com/mansona))
+  * [#289](https://github.com/ember-cli/ember-cli-version-checker/pull/289) setup release-plan ([@mansona](https://github.com/mansona))
+
+#### Committers: 3
+- Chris Manson ([@mansona](https://github.com/mansona))
+- Cory Forsyth ([@bantic](https://github.com/bantic))
+- Dave Combs ([@davecombs](https://github.com/davecombs))
+
 ## v5.1.2 (2021-01-19)
 
 #### :rocket: Enhancement
