@@ -1,0 +1,30 @@
+{
+  "solution": {
+    "ember-cli-version-checker": {
+      "impact": "major",
+      "oldVersion": "5.1.2",
+      "newVersion": "6.0.0",
+      "tagName": "latest",
+      "constraints": [
+        {
+          "impact": "major",
+          "reason": "Appears in changelog section :boom: Breaking Change"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :bug: Bug Fix"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :memo: Documentation"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :house: Internal"
+        }
+      ],
+      "pkgJSONPath": "./package.json"
+    }
+  },
+  "description": "## Release (2026-07-21)\n\n* ember-cli-version-checker 6.0.0 (major)\n\n#### :boom: Breaking Change\n* `ember-cli-version-checker`\n  * [#292](https://github.com/ember-cli/ember-cli-version-checker/pull/292) convert to ESM only and set type: module in package.json ([@mansona](https://github.com/mansona))\n  * [#291](https://github.com/ember-cli/ember-cli-version-checker/pull/291) drop yarn pnp tests - i.e. drop support for yarn pnp ([@mansona](https://github.com/mansona))\n  * [#288](https://github.com/ember-cli/ember-cli-version-checker/pull/288) drop support for Node < 22 and swap to pnpm ([@mansona](https://github.com/mansona))\n\n#### :bug: Bug Fix\n* `ember-cli-version-checker`\n  * [#248](https://github.com/ember-cli/ember-cli-version-checker/pull/248) fixed return value of getVersionFromJSONFile ([@davecombs](https://github.com/davecombs))\n\n#### :memo: Documentation\n* `ember-cli-version-checker`\n  * [#232](https://github.com/ember-cli/ember-cli-version-checker/pull/232) Remove bower references ([@bantic](https://github.com/bantic))\n\n#### :house: Internal\n* `ember-cli-version-checker`\n  * [#290](https://github.com/ember-cli/ember-cli-version-checker/pull/290) update fixturify project ([@mansona](https://github.com/mansona))\n  * [#289](https://github.com/ember-cli/ember-cli-version-checker/pull/289) setup release-plan ([@mansona](https://github.com/mansona))\n\n#### Committers: 3\n- Chris Manson ([@mansona](https://github.com/mansona))\n- Cory Forsyth ([@bantic](https://github.com/bantic))\n- Dave Combs ([@davecombs](https://github.com/davecombs))\n"
+}
