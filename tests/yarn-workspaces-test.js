@@ -15,7 +15,7 @@ skipWindows('with yarn workspace', function () {
     project.workspaces = ['app', 'addon'];
 
     project.addDependency('bar', '2.0.0');
-    project.addDependency('ember-cli-version-checker', `link:${__dirname}/../`);
+    project.linkDevDependency('ember-cli-version-checker', `link:${import.meta.dirname}/../`);
     project.files['index.js'] = buildVersionCheckerBin(`{
       root: process.cwd(),
       isEmberCLIProject() {},
@@ -29,7 +29,7 @@ skipWindows('with yarn workspace', function () {
     };
 
     const theAddon = new Project('the-addon', '0.0.0');
-    theAddon.addDependency('bar', `link:${__dirname}/../`);
+    theAddon.addDependency('bar', `link:${import.meta.dirname}/../`);
     theAddon.files['dummy.js'] = buildVersionCheckerBin(`{
       project: {
         root: '${project.baseDir}/addon',

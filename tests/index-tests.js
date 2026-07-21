@@ -1,8 +1,6 @@
-'use strict';
-
-const assert = require('assert');
-const VersionChecker = require('..');
-const FakeProject = require('./utils/project');
+import assert from 'assert';
+import VersionChecker from '../index.js';
+import { Project as FakeProject } from './utils/project.js';
 
 describe('ember-cli-version-checker', function () {
   describe('VersionChecker#forEmber', function () {

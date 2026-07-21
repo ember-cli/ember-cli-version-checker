@@ -1,8 +1,8 @@
-'use strict';
-
-module.exports = function buildVersionCheckerBin(addon) {
+export default function buildVersionCheckerBin(addon) {
   return `
-    const VersionChecker = require('ember-cli-version-checker');
+    import VersionChecker from 'ember-cli-version-checker';
+
+    debugger
 
     const checker = new VersionChecker(${addon});
     const dep = checker.for(process.argv[2]);

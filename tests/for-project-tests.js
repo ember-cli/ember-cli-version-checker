@@ -1,8 +1,8 @@
-'use strict';
-const { EOL } = require('os');
+import { EOL } from 'os';
 
-const assert = require('assert');
-const VersionChecker = require('..');
+import assert from 'assert';
+import VersionChecker from '../index.js';
+import {Project as FakeProject} from './utils/project.js';
 
 function isObject(x) {
   return typeof x === 'object' && x !== null;
@@ -35,7 +35,6 @@ describe('ember-cli-version-checker', function () {
 
     let project;
     beforeEach(async function () {
-      const FakeProject = require('./utils/project');
       project = new FakeProject('rsvp', '3.1.4');
       project.addAddon('ember', '2.0.0');
       await project.write();
@@ -45,7 +44,6 @@ describe('ember-cli-version-checker', function () {
       let checker;
 
       beforeEach(async function () {
-        const FakeProject = require('./utils/project');
         project = new FakeProject('rsvp', '3.1.4');
         project.addAddon('ember', '2.0.0');
 
