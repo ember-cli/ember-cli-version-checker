@@ -1,13 +1,12 @@
-'use strict';
-const {
+import {
   hasSingleImplementation,
   allAddons,
-} = require('./utils/single-implementation');
-const semver = require('semver');
-const SilentError = require('silent-error');
-const { EOL } = require('os');
+} from './utils/single-implementation.js';
+import semver from 'semver';
+import SilentError from 'silent-error';
+import { EOL } from 'os';
 
-module.exports = class ProjectWideDependencyChecker {
+export default class ProjectWideDependencyChecker {
   constructor(project) {
     if (
       !project ||

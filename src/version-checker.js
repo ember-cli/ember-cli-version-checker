@@ -1,9 +1,7 @@
-'use strict';
+import DependencyVersionChecker from './dependency-version-checker.js';
+import ProjectWideDependencyChecker from './project-wide-dependency-checker.js';
 
-const DependencyVersionChecker = require('./dependency-version-checker');
-const ProjectWideDependencyChecker = require('./project-wide-dependency-checker');
-
-module.exports = class VersionChecker {
+export default class VersionChecker {
   constructor(addon) {
     this._addon = addon;
   }

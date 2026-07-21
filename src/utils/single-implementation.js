@@ -1,13 +1,10 @@
-'use strict';
-
 const UNIQUE_ADDON_MAP = new WeakMap();
 
 /**
  * Traverse the project's addons tree to determine singleton root,
  * cache the boolean result in project x addonName matrix
  */
-module.exports.hasSingleImplementation = hasSingleImplementation;
-function hasSingleImplementation(targetName, project) {
+export function hasSingleImplementation(targetName, project) {
   if (!UNIQUE_ADDON_MAP.has(project)) {
     UNIQUE_ADDON_MAP.set(project, new Map());
   }
@@ -33,8 +30,7 @@ function hasSingleImplementation(targetName, project) {
   return true;
 }
 
-module.exports.allAddons = allAddons;
-function* allAddons(current) {
+export function* allAddons(current) {
   if (Array.isArray(current.addons) === false) {
     return;
   }

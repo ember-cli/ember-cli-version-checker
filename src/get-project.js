@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function (input) {
+export default function getProject(input) {
   if (input.project) {
     return input.project;
   } else if (input.root && typeof input.isEmberCLIProject === 'function') {

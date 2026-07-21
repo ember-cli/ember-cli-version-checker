@@ -1,7 +1,7 @@
-'use strict';
-const semver = require('semver');
-const getProject = require('./get-project');
-const resolvePackagePath = require('resolve-package-path');
+import semver from 'semver';
+import getProject from './get-project.js';
+import resolvePackagePath from 'resolve-package-path';
+import { readFileSync } from 'node:fs';
 
 /*
  * Retrieve the version field from the package.json file contents.
@@ -10,7 +10,7 @@ const resolvePackagePath = require('resolve-package-path');
 function getVersionFromJSONFile(filePath) {
   try {
     // Use the require cache to avoid file I/O after first call on a given path.
-    let pkg = require(filePath);
+    let pkg = JSON.parse(readFileSync(filePath, 'utf8'));
 
     // Note: the callers rely on the fact that pkg.version may be undefined, so
     // we must not be "smart" about setting the value to null here to stop any
@@ -25,7 +25,7 @@ function getVersionFromJSONFile(filePath) {
 /**
  * DependencyVersionChecker
  */
-class DependencyVersionChecker {
+export default class DependencyVersionChecker {
   constructor(parent, name) {
     this._parent = parent;
     this.name = name;
@@ -83,5 +83,3 @@ for (let method of ['gt', 'lt', 'gte', 'lte', 'eq', 'neq', 'satisfies']) {
     return semver[method](this.version, range);
   };
 }
-
-module.exports = DependencyVersionChecker;

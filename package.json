@@ -13,6 +13,7 @@
   "license": "MIT",
   "author": "Robert Jackson <me@rwjblue.com>",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "test": "tests"
   },
