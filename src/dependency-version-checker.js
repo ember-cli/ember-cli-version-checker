@@ -76,7 +76,7 @@ class DependencyVersionChecker {
 }
 
 for (let method of ['gt', 'lt', 'gte', 'lte', 'eq', 'neq', 'satisfies']) {
-  DependencyVersionChecker.prototype[method] = function(range) {
+  DependencyVersionChecker.prototype[method] = function (range) {
     if (!this.version) {
       return method === 'neq';
     }

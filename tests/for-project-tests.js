@@ -8,9 +8,9 @@ function isObject(x) {
   return typeof x === 'object' && x !== null;
 }
 
-describe('ember-cli-version-checker', function() {
-  describe('VersionChecker.forProject', function() {
-    it('errors if given a project without initialized addons', function() {
+describe('ember-cli-version-checker', function () {
+  describe('VersionChecker.forProject', function () {
+    it('errors if given a project without initialized addons', function () {
       assert.throws(() => {
         VersionChecker.forProject();
       }, /forProject must be provided an ember-cli project class/);
@@ -34,17 +34,17 @@ describe('ember-cli-version-checker', function() {
     });
 
     let project;
-    beforeEach(function() {
+    beforeEach(function () {
       const FakeProject = require('./utils/project');
       project = new FakeProject('rsvp', '3.1.4');
       project.addAddon('ember', '2.0.0');
       project.writeSync();
     });
 
-    describe('Multiple instances check', function() {
+    describe('Multiple instances check', function () {
       let checker;
 
-      beforeEach(function() {
+      beforeEach(function () {
         const FakeProject = require('./utils/project');
         project = new FakeProject('rsvp', '3.1.4');
         project.addAddon('ember', '2.0.0');
@@ -57,21 +57,21 @@ describe('ember-cli-version-checker', function() {
         project.addAddon('trailing-alpha', '1.0.0-alpha.1');
         project.addAddon('top', '1.0.0');
         project.addAddon('bar', '3.0.0');
-        project.addAddon('fake-addon', '3.0.0', addon => {
+        project.addAddon('fake-addon', '3.0.0', (addon) => {
           addon.addAddon('foo', '1.0.0');
-          addon.addAddon('bar', '2.0.0', addon => {
+          addon.addAddon('bar', '2.0.0', (addon) => {
             addon.addAddon('foo', '1.0.0');
           });
         });
       });
 
-      it('validates VersionChecker.forProject throws unless given a project', function() {
+      it('validates VersionChecker.forProject throws unless given a project', function () {
         assert.throws(() => {
           VersionChecker.forProject({});
         }, /forProject must be provided an ember-cli project class/);
       });
 
-      it('#assertSingleImplementation throws correctly', function() {
+      it('#assertSingleImplementation throws correctly', function () {
         assert.throws(() => {
           checker.assertSingleImplementation('--no-such-addon--');
         }, /This project requires a single implementation version of the npm package `--no-such-addon--`, but none where found./);
@@ -86,7 +86,7 @@ describe('ember-cli-version-checker', function() {
         }, / - bar @ .*rsvp.*node_modules.*bar/);
       });
 
-      it('#hasSingleImplementation detects singleton', function() {
+      it('#hasSingleImplementation detects singleton', function () {
         assert.equal(checker.hasSingleImplementation('foo'), false);
         assert.equal(checker.hasSingleImplementation('top'), true);
       });
@@ -116,28 +116,28 @@ describe('ember-cli-version-checker', function() {
         ]);
 
         assert.deepEqual(
-          result.foo.map(x => x.name),
+          result.foo.map((x) => x.name),
           ['foo', 'foo']
         );
 
         assert.deepEqual(
-          result.top.map(x => x.name),
+          result.top.map((x) => x.name),
           ['top']
         );
 
         assert.deepEqual(
-          result['never-ever-ever'].map(x => x.name),
+          result['never-ever-ever'].map((x) => x.name),
           []
         );
       });
 
-      it('#hasSingleImplementation finds duplication and can be fixed by resolution', function() {
+      it('#hasSingleImplementation finds duplication and can be fixed by resolution', function () {
         assert.ok(!checker.hasSingleImplementation('bar'));
       });
 
-      it('has a functioning allAddons iterator', function() {
+      it('has a functioning allAddons iterator', function () {
         assert.deepEqual(
-          [...checker.allAddons()].map(x => x.name),
+          [...checker.allAddons()].map((x) => x.name),
           [
             'ember',
             'alpha',
@@ -153,15 +153,15 @@ describe('ember-cli-version-checker', function() {
         );
       });
 
-      describe('#check', function() {
-        it('noop works as expected', function() {
+      describe('#check', function () {
+        it('noop works as expected', function () {
           const checked = checker.check({});
           assert.deepEqual(checked.node_modules, {});
           assert.equal(checked.isSatisfied, true);
           assert.equal(checked.message, '');
         });
 
-        it('is satisfied by pre-releases', function() {
+        it('is satisfied by pre-releases', function () {
           const checked = checker.check({
             alpha: '>= 1.0.0',
             beta: '>= 1.0.0',
@@ -181,7 +181,7 @@ describe('ember-cli-version-checker', function() {
           assert.equal(checked.isSatisfied, true);
         });
 
-        it('is not satisfied by pre-releases in the same minor', function() {
+        it('is not satisfied by pre-releases in the same minor', function () {
           const checked = checker.check({
             'trailing-alpha': '>= 1.0.0',
           });
@@ -195,7 +195,7 @@ describe('ember-cli-version-checker', function() {
           assert.equal(checked.isSatisfied, false);
         });
 
-        it('is not satisfied if checked deps are missing', function() {
+        it('is not satisfied if checked deps are missing', function () {
           const checked = checker.check({
             '@ember-cli/no-such-addon--': '*',
             '@ember-cli/no-such-other-addon--': '*',
@@ -215,7 +215,7 @@ describe('ember-cli-version-checker', function() {
           assert.equal(checked.isSatisfied, false);
         });
 
-        it('is not satisfied if checked deps are present but the versions are not satisfied', function() {
+        it('is not satisfied if checked deps are present but the versions are not satisfied', function () {
           const checked = checker.check({
             top: '2.0.0',
             bar: '4.0.0',
@@ -235,7 +235,7 @@ describe('ember-cli-version-checker', function() {
           assert.equal(checked.isSatisfied, false);
         });
 
-        it('is not satisfied if checked deps are present but not all versions are not satisfied', function() {
+        it('is not satisfied if checked deps are present but not all versions are not satisfied', function () {
           const checked = checker.check({
             top: '2.0.0',
             bar: '4.0.0',
@@ -255,7 +255,7 @@ describe('ember-cli-version-checker', function() {
           assert.equal(checked.isSatisfied, false);
         });
 
-        it('is satisfied if all checked deps are present and the versions are satisfied', function() {
+        it('is satisfied if all checked deps are present and the versions are satisfied', function () {
           const checked = checker.check({
             top: '1.0.0',
             bar: '>= 2.0.0',
@@ -277,7 +277,7 @@ describe('ember-cli-version-checker', function() {
           assert.equal(checked.message, '');
         });
 
-        it('is NOT satisfied with partial match', function() {
+        it('is NOT satisfied with partial match', function () {
           const checked = checker.check({
             top: '1.0.0',
             bar: '>= 2.0.1',
@@ -298,7 +298,7 @@ describe('ember-cli-version-checker', function() {
           assert.equal(checked.isSatisfied, false);
         });
 
-        it('is not satisfied if some checked deps are missing', function() {
+        it('is not satisfied if some checked deps are missing', function () {
           const checked = checker.check({
             '@ember-cli/no-such-addon--': '*',
             ember: '*',
@@ -318,7 +318,7 @@ describe('ember-cli-version-checker', function() {
           assert.equal(checked.isSatisfied, false);
         });
 
-        it('checked.message is a an ok default error message', function() {
+        it('checked.message is a an ok default error message', function () {
           const checked = checker.check({
             '@ember-cli/no-such-addon--': '*',
             ember: '*',
@@ -327,7 +327,7 @@ describe('ember-cli-version-checker', function() {
           assert.equal(checked.message, message);
         });
 
-        it('checker has a functioning assert method', function() {
+        it('checker has a functioning assert method', function () {
           checker.check({}).assert();
 
           assert.throws(() => {

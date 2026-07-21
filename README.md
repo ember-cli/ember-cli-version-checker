@@ -28,7 +28,7 @@ module.exports = {
     } else {
       return this.treeGenerator(path.join(baseTemplatesPath, 'legacy'));
     }
-  }
+  },
 };
 ```
 
@@ -53,8 +53,8 @@ module.exports = {
       /* deal with 2.0.0+ stuff */
     } else {
       /* provide backwards compat */
-    };
-  }
+    }
+  },
 };
 ```
 
@@ -73,7 +73,7 @@ module.exports = {
     let checker = new VersionChecker(this.project);
 
     checker.for('ember-cli').assertAbove('2.0.0');
-  }
+  },
 };
 ```
 
@@ -89,8 +89,13 @@ module.exports = {
 
     let checker = new VersionChecker(this.project);
 
-    checker.for('ember-cli').assertAbove('2.0.0', 'To use awesome-addon you must have ember-cli 2.0.0');
-  }
+    checker
+      .for('ember-cli')
+      .assertAbove(
+        '2.0.0',
+        'To use awesome-addon you must have ember-cli 2.0.0'
+      );
+  },
 };
 ```
 
@@ -113,8 +118,8 @@ module.exports = {
       /* deal with 2.0.0 stuff */
     } else {
       /* provide backwards compat */
-    };
-  }
+    }
+  },
 };
 ```
 
@@ -135,8 +140,8 @@ module.exports = {
 
     if (dep.exists()) {
       /* do things when present */
-    };
-  }
+    }
+  },
 };
 ```
 
@@ -157,7 +162,7 @@ module.exports = {
     let dep = checker.for('ember-cli-qunit');
 
     // do something with dep.version
-  }
+  },
 };
 ```
 
@@ -171,7 +176,7 @@ A unique addon can still be included multiple times if it's a nested
 dependency, but they are guaranteed to be resolved to same version in
 node_modules. This happens when the dependency in problem specifies a valid
 version range or the app uses [yarn
-  resolutions](https://yarnpkg.com/lang/en/docs/selective-version-resolutions/).
+resolutions](https://yarnpkg.com/lang/en/docs/selective-version-resolutions/).
 
 This is useful if the app wants to make sure there's no unexpected assets from
 the addon being included but still allow the addon to be included in the
@@ -190,7 +195,7 @@ module.exports = {
     if (checker.hasSingleImplementation('<my-addon>')) {
       /* do things when <my-addon> is unique */
     }
-  }
+  },
 };
 ```
 
@@ -209,8 +214,11 @@ module.exports = {
 
     let checker = VersionChecker.forProject(this.project);
 
-    checker.assertSingleImplementation('<my-addon>', 'Please make sure <my-addon> has only one implementation, please correct and here is a helpful message!');
-  }
+    checker.assertSingleImplementation(
+      '<my-addon>',
+      'Please make sure <my-addon> has only one implementation, please correct and here is a helpful message!'
+    );
+  },
 };
 ```
 
@@ -229,10 +237,9 @@ module.exports = {
     let checker = VersionChecker.forProject(this.project);
 
     checker.filterAddonsByName('<my-addon>'); // => an array of addon instances who have the name `<my-addon>`
-  }
+  },
 };
 ```
-
 
 ### allAddons
 
@@ -257,19 +264,19 @@ module.exports = {
 
 ### check
 
-A utility to verify that addons are installed at appropriate versions.  `npm`
+A utility to verify that addons are installed at appropriate versions. `npm`
 and `yarn` resolve conflicting transitive dependency requirements by installing
-multiple versions.  They do not include a mechanism for packages to declare
-that a dependency must be unique.  This is, however, a practical constraint
+multiple versions. They do not include a mechanism for packages to declare
+that a dependency must be unique. This is, however, a practical constraint
 when building Ember applications (for example, we would not want to build an
 application that shipped two versions of Ember Data). [Related discussion on npm](https://github.com/npm/rfcs/pull/23)
 
 Every addon in the ember ecosystem implicitly depends on `ember-source`, and
 most likely a specific version range. If that dependency is specified as a
 `package.json` dependency, a mismatch between application and addon would
-result in duplicating `ember-source`.  Instead of failing the build, we would
+result in duplicating `ember-source`. Instead of failing the build, we would
 build an application with an unknown version of `ember-source`, subverting the
-point of specifying dependency version ranges in the first place!  The `check`
+point of specifying dependency version ranges in the first place! The `check`
 API provides a mechanism to avoid this and fail fast in the build step, instead
 of building an invalid application with harder to debug runtime errors.
 
@@ -287,7 +294,7 @@ module.exports = {
 
     const checker = VersionChecker.forProject(this.project);
     const check = checker.check({
-      'ember-source': '>= 3.4.8'
+      'ember-source': '>= 3.4.8',
     });
 
     // if it would like to simply assert
@@ -302,8 +309,8 @@ module.exports = {
     if (!check.isSatisfied) {
       const altCheck = checker.check({
         'magical-polyfil': '>= 1.0.0',
-        'ember-source': '>= 3.0.0'
-      })
+        'ember-source': '>= 3.0.0',
+      });
 
       check.assert('[awesome-addon] dependency check failed:');
       // will throw error message similar to the following if the check was not satisfied:
@@ -311,7 +318,7 @@ module.exports = {
       //     - 'magical-polyfil' expected version [>= 1.0.0] but got version: [0.0.1]
       //     - 'ember-source' expected version [>= 3.0.0] but got version: [2.0.-]
     }
-  }
+  },
 };
 ```
 
